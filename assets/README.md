@@ -13,4 +13,3 @@
 | Agentic Advanced | 120 | `agentic.svg` |
 | Expert | 100 | `expert.svg` |
 
-The catalogue already generates all 1,000 project records in the browser. The existing section capture buttons can save PNG images, while the PDF button opens the browser print dialog; select **Save as PDF** there. This keeps generated PDFs current with filters and the full project list instead of committing stale binary exports.
