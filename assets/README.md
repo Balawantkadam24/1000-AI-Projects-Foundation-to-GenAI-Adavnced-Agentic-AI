@@ -1,6 +1,6 @@
 # Section-wise project assets
 
-This directory contains generated, lightweight SVG cover images for the eight catalogue sections in `My Project.html`.
+
 
 | Section | Projects | Image |
 |---|---:|---|
