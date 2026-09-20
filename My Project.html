@@ -1,0 +1,2092 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>1000 AI Projects · Foundation → GenAI → Agentic AI · Frameworks</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+  :root{
+    --bg:#080b12;
+    --panel:#0f1420;
+    --panel-2:#141b2b;
+    --panel-3:#1a2233;
+    --border:#222c40;
+    --border-2:#2e3a54;
+    --text:#e8edf7;
+    --muted:#8b98b4;
+    --dim:#5d6a85;
+    --accent:#6366f1;
+    --radius:14px;
+
+    /* level colors (RGB triples so we can compose rgba without color-mix) */
+    --foundation:#22c55e;    --foundation-rgb:34,197,94;
+    --beginner:#14b8a6;      --beginner-rgb:20,184,166;
+    --intermediate:#3b82f6;  --intermediate-rgb:59,130,246;
+    --advanced:#a855f7;      --advanced-rgb:168,85,247;
+    --expert:#f59e0b;        --expert-rgb:245,158,11;
+    --research:#ef4444;      --research-rgb:239,68,68;
+    --genai:#ec4899;         --genai-rgb:236,72,153;
+    --agentic:#06b6d4;       --agentic-rgb:6,182,212;
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+
+  /* fixed ambient glow — hidden during capture */
+  #bgGlow{
+    position:fixed;inset:0;z-index:0;pointer-events:none;
+    background:
+      radial-gradient(700px 500px at 12% -8%, rgba(99,102,241,.16), transparent 60%),
+      radial-gradient(700px 500px at 92% 4%, rgba(236,72,153,.12), transparent 60%),
+      radial-gradient(800px 600px at 50% 110%, rgba(6,182,212,.11), transparent 60%);
+  }
+
+  .wrap{position:relative;z-index:1;max-width:1400px;margin:0 auto;padding:0 20px 60px}
+
+  /* ---------------- SECTION WRAPPER + CAPTURE BUTTON ---------------- */
+  .sec{
+    position:relative;
+  }
+  .sec-capture{
+    position:absolute;
+    top:8px;right:8px;
+    z-index:6;
+    width:34px;height:34px;
+    border-radius:10px;
+    background:rgba(20,27,43,.9);
+    border:1px solid var(--border-2);
+    color:var(--muted);
+    cursor:pointer;
+    display:grid;place-items:center;
+    font-size:.9rem;
+    opacity:0;
+    transition:opacity .2s ease, transform .2s ease, border-color .2s, color .2s;
+    font-family:inherit;
+  }
+  .sec:hover .sec-capture{opacity:1}
+  .sec-capture:hover{
+    opacity:1!important;
+    transform:scale(1.08);
+    border-color:rgba(236,72,153,.6);
+    color:#f9a8d4;
+  }
+  .sec-capture:disabled{opacity:.5!important;cursor:wait}
+  .sec-capture svg{width:15px;height:15px;fill:none;stroke:currentColor;
+    stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+  /* ---------------- HEADER ---------------- */
+  header{padding:56px 0 26px;text-align:center;position:relative}
+
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:9px;
+    font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--muted);
+    border:1px solid var(--border);
+    background:rgba(255,255,255,.025);
+    padding:7px 15px;border-radius:999px;margin-bottom:20px;
+  }
+  .eyebrow .dot{
+    width:7px;height:7px;border-radius:50%;
+    background:linear-gradient(135deg,#6366f1,#ec4899,#06b6d4);
+    box-shadow:0 0 12px #06b6d4;
+    animation:pulse 2.2s ease-in-out infinite;
+  }
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+
+  h1{
+    font-size:clamp(1.85rem,5vw,3.15rem);
+    font-weight:800;letter-spacing:-.035em;line-height:1.08;margin-bottom:14px;
+  }
+  h1 .grad{
+    background:linear-gradient(100deg,#6366f1 0%,#ec4899 45%,#06b6d4 100%);
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+  }
+  .sub{color:var(--muted);max-width:800px;margin:0 auto;font-size:1rem}
+
+  /* ---------------- MASTERS BANNER ---------------- */
+  .masters{
+    display:flex;align-items:center;gap:16px;
+    max-width:920px;margin:26px auto 0;
+    padding:18px 24px;
+    background:linear-gradient(135deg,rgba(99,102,241,.14),rgba(236,72,153,.10) 50%,rgba(6,182,212,.10));
+    border:1px solid rgba(129,140,248,.32);
+    border-radius:16px;
+    text-align:left;
+    box-shadow:0 20px 48px -28px rgba(99,102,241,.5);
+  }
+  .masters .mi{
+    flex:0 0 auto;
+    width:52px;height:52px;border-radius:14px;
+    display:grid;place-items:center;
+    font-size:1.5rem;
+    background:linear-gradient(135deg,#6366f1,#ec4899 55%,#06b6d4);
+    box-shadow:0 0 22px rgba(236,72,153,.42);
+  }
+  .masters .mt{flex:1}
+  .masters .l1{
+    font-size:1.02rem;font-weight:800;letter-spacing:-.01em;
+    color:#fff;line-height:1.35;margin-bottom:4px;
+  }
+  .masters .l1 b{
+    background:linear-gradient(100deg,#c7d2fe,#f9a8d4 50%,#67e8f9);
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+  }
+  .masters .l2{
+    font-size:.86rem;color:#a8b4ca;line-height:1.5;
+  }
+  .masters .l2 em{color:#c7d2fe;font-style:normal;font-weight:600}
+
+  /* ---------------- FRAMEWORK SHOWCASE ---------------- */
+  .fw-section{
+    margin:38px 0 26px;
+    padding:22px;
+    background:linear-gradient(180deg,rgba(20,27,43,.7),rgba(15,20,32,.7));
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+  }
+  .fw-head{
+    display:flex;align-items:center;justify-content:space-between;
+    gap:12px;margin-bottom:16px;flex-wrap:wrap;
+  }
+  .fw-title{
+    display:flex;align-items:center;gap:10px;
+    font-size:.9rem;font-weight:700;letter-spacing:-.01em;
+  }
+  .fw-title .icon{
+    width:30px;height:30px;border-radius:9px;display:grid;place-items:center;
+    background:linear-gradient(135deg,rgba(99,102,241,.25),rgba(236,72,153,.2));
+    border:1px solid rgba(129,140,248,.35);
+    font-size:.95rem;
+  }
+  .fw-title small{
+    display:block;font-size:.72rem;color:var(--muted);font-weight:500;
+    letter-spacing:.02em;
+  }
+  .fw-count{font-size:.76rem;color:var(--muted)}
+  .fw-count b{color:var(--text)}
+
+  .fw-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
+    gap:9px;
+  }
+  .fw-chip{
+    position:relative;
+    display:flex;flex-direction:column;gap:2px;
+    padding:10px 12px;
+    background:var(--panel-3);
+    border:1px solid var(--border);
+    border-radius:10px;
+    cursor:pointer;
+    transition:.16s ease;
+    overflow:hidden;
+    text-align:left;
+    font-family:inherit;
+    color:inherit;
+    width:100%;
+  }
+  .fw-chip:hover{transform:translateY(-2px);border-color:var(--border-2);background:#1e2739}
+  .fw-chip.active{
+    border-color:rgba(129,140,248,.75);
+    background:linear-gradient(135deg,rgba(99,102,241,.2),rgba(236,72,153,.12));
+    box-shadow:0 0 0 1px rgba(129,140,248,.3);
+  }
+  .fw-chip::before{
+    content:"";position:absolute;left:0;top:0;bottom:0;width:3px;
+    background:var(--fw-color,#6366f1);opacity:.9;
+  }
+  .fw-chip .name{
+    font-size:.82rem;font-weight:700;color:#fff;
+    display:flex;align-items:center;gap:6px;
+  }
+  .fw-chip .name .cat{
+    font-size:.58rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+    padding:1px 5px;border-radius:4px;
+    background:rgba(255,255,255,.06);
+    color:var(--fw-color);
+    border:1px solid rgba(255,255,255,.12);
+  }
+  .fw-chip .desc{font-size:.68rem;color:var(--muted);line-height:1.4}
+  .fw-chip .n{
+    position:absolute;top:8px;right:10px;
+    font-size:.62rem;font-family:ui-monospace,monospace;
+    color:var(--dim);
+  }
+
+  /* ---------------- STATS ---------------- */
+  .stats{
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+    gap:11px;margin:24px 0 22px;
+  }
+  .stat{
+    background:linear-gradient(180deg,var(--panel),var(--panel-2));
+    border:1px solid var(--border);border-radius:12px;
+    padding:13px 15px;text-align:left;position:relative;overflow:hidden;
+    cursor:pointer;transition:.18s ease;
+  }
+  .stat:hover{border-color:var(--border-2);transform:translateY(-2px)}
+  .stat.active{border-color:var(--sc);box-shadow:0 0 0 1px var(--sc) inset}
+  .stat .n{font-size:1.45rem;font-weight:800;letter-spacing:-.02em;color:var(--sc,var(--text))}
+  .stat .l{font-size:.68rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-top:2px}
+  .stat::after{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--sc);opacity:.9}
+
+  /* ---------------- TOOLBAR ---------------- */
+  .toolbar{
+    position:sticky;top:0;z-index:40;
+    background:rgba(8,11,18,.9);
+    backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+    border:1px solid var(--border);border-radius:var(--radius);
+    padding:13px;margin-bottom:18px;
+    display:flex;flex-wrap:wrap;gap:11px;align-items:center;
+  }
+  /* fallback for browsers without backdrop-filter */
+  @supports not (backdrop-filter: blur(1px)){
+    .toolbar{background:rgba(8,11,18,.97)}
+  }
+
+  .search{position:relative;flex:1 1 260px;min-width:200px}
+  .search svg{position:absolute;left:13px;top:50%;transform:translateY(-50%);
+    width:16px;height:16px;stroke:var(--dim);fill:none;stroke-width:2;stroke-linecap:round}
+  .search input{
+    width:100%;background:var(--panel-3);border:1px solid var(--border);
+    color:var(--text);padding:11px 36px 11px 38px;border-radius:10px;
+    font-size:.9rem;font-family:inherit;outline:none;transition:.18s;
+  }
+  .search input::placeholder{color:var(--dim)}
+  .search input:focus{border-color:#3d4b6e;box-shadow:0 0 0 3px rgba(99,102,241,.16)}
+  .search .clr{
+    position:absolute;right:10px;top:50%;transform:translateY(-50%);
+    background:none;border:none;color:var(--dim);cursor:pointer;font-size:1rem;
+    line-height:1;padding:4px;display:none;
+  }
+  .search .clr.show{display:block}
+  .search .clr:hover{color:var(--text)}
+
+  select{
+    background:var(--panel-3);border:1px solid var(--border);color:var(--text);
+    padding:11px 12px;border-radius:10px;font-size:.86rem;font-family:inherit;
+    outline:none;cursor:pointer;transition:.18s;max-width:220px;
+  }
+  select:focus{border-color:#3d4b6e;box-shadow:0 0 0 3px rgba(99,102,241,.16)}
+  select.genai{border-color:rgba(236,72,153,.35);color:#f9a8d4}
+  select.agentic{border-color:rgba(6,182,212,.35);color:#67e8f9}
+  select.framework{border-color:rgba(129,140,248,.4);color:#c7d2fe}
+
+  .spacer{flex:1 1 auto}
+
+  .btn{
+    font-family:inherit;font-size:.83rem;font-weight:600;
+    border-radius:10px;padding:10px 15px;cursor:pointer;
+    border:1px solid var(--border);background:var(--panel-3);color:var(--text);
+    display:inline-flex;align-items:center;gap:7px;transition:.18s ease;
+    white-space:nowrap;
+  }
+  .btn:hover{border-color:var(--border-2);background:#1e2739;transform:translateY(-1px)}
+  .btn:active{transform:translateY(0)}
+  .btn svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;
+    stroke-linecap:round;stroke-linejoin:round}
+
+  .btn.pdf{color:#fca5a5;border-color:rgba(239,68,68,.3);background:rgba(239,68,68,.08)}
+  .btn.pdf:hover{background:rgba(239,68,68,.16);border-color:rgba(239,68,68,.5)}
+  .btn.doc{color:#93c5fd;border-color:rgba(59,130,246,.3);background:rgba(59,130,246,.08)}
+  .btn.doc:hover{background:rgba(59,130,246,.16);border-color:rgba(59,130,246,.5)}
+  .btn.txt{color:#6ee7b7;border-color:rgba(16,185,129,.3);background:rgba(16,185,129,.08)}
+  .btn.txt:hover{background:rgba(16,185,129,.16);border-color:rgba(16,185,129,.5)}
+
+  /* ---------------- ACTIVE FILTERS ---------------- */
+  .active-filters{
+    display:flex;flex-wrap:wrap;gap:7px;margin-bottom:14px;align-items:center;
+    font-size:.78rem;color:var(--muted);
+  }
+  .active-filters .lbl{font-weight:600;color:var(--dim);text-transform:uppercase;
+    font-size:.66rem;letter-spacing:.1em;}
+  .pill{
+    display:inline-flex;align-items:center;gap:6px;
+    padding:4px 10px;border-radius:999px;
+    background:linear-gradient(135deg,rgba(99,102,241,.18),rgba(236,72,153,.12));
+    border:1px solid rgba(129,140,248,.35);
+    color:#c7d2fe;font-weight:600;font-size:.74rem;
+    font-family:inherit;
+  }
+  .pill button{
+    background:none;border:none;color:inherit;cursor:pointer;
+    font-size:.85rem;line-height:1;padding:0;opacity:.7;
+  }
+  .pill button:hover{opacity:1}
+
+  /* ---------------- META ---------------- */
+  .metabar{
+    display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;
+    gap:10px;margin-bottom:16px;font-size:.82rem;color:var(--muted);
+  }
+  .metabar b{color:var(--text);font-weight:600}
+  .metabar kbd{
+    background:var(--panel-3);border:1px solid var(--border);border-bottom-width:2px;
+    border-radius:5px;padding:1px 6px;font-size:.72rem;font-family:ui-monospace,monospace;
+    color:var(--muted);
+  }
+
+  /* ---------------- GRID ---------------- */
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:15px}
+
+  .card{
+    position:relative;display:flex;flex-direction:column;
+    background:linear-gradient(180deg,var(--panel),var(--panel-2));
+    border:1px solid var(--border);border-radius:var(--radius);
+    padding:17px 17px 15px;overflow:hidden;
+    transition:transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+    animation:rise .3s ease backwards;
+  }
+  @keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+  .card::before{
+    content:"";position:absolute;top:0;left:0;right:0;height:3px;
+    background:var(--lv);
+    opacity:.95;
+  }
+  .card:hover{
+    transform:translateY(-3px);border-color:var(--border-2);
+    box-shadow:0 16px 36px -22px #000, 0 0 0 1px rgba(255,255,255,.03);
+  }
+
+  .card-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:11px;flex-wrap:wrap}
+  .pid{
+    font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+    font-size:.68rem;color:var(--dim);letter-spacing:.05em;
+  }
+  .badges{display:flex;gap:6px;flex-wrap:wrap}
+  .lvl{
+    font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--lv);
+    background:var(--lv-soft);
+    border:1px solid var(--lv-line);
+    padding:3px 8px;border-radius:6px;white-space:nowrap;
+  }
+  .tbadge{
+    font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+    padding:3px 7px;border-radius:6px;white-space:nowrap;
+  }
+  .tbadge.trad{color:#94a3b8;background:rgba(148,163,184,.1);border:1px solid rgba(148,163,184,.25)}
+  .tbadge.genai{color:#f9a8d4;background:rgba(236,72,153,.13);border:1px solid rgba(236,72,153,.32)}
+  .tbadge.agentic{color:#67e8f9;background:rgba(6,182,212,.13);border:1px solid rgba(6,182,212,.32)}
+
+  .card h3{
+    font-size:.96rem;font-weight:700;letter-spacing:-.012em;line-height:1.35;
+    margin-bottom:6px;color:#fff;
+  }
+
+  .domain{
+    display:inline-block;font-size:.68rem;color:var(--muted);
+    background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);
+    padding:2px 8px;border-radius:6px;margin-bottom:9px;
+  }
+
+  .desc{font-size:.8rem;color:#a8b4ca;line-height:1.5;margin-bottom:12px;flex:1}
+
+  .specs{
+    display:flex;flex-direction:column;gap:5px;
+    border-top:1px solid var(--border);padding-top:11px;
+  }
+  .spec{display:flex;gap:8px;font-size:.75rem;line-height:1.45}
+  .spec .k{
+    flex:0 0 78px;color:var(--dim);text-transform:uppercase;
+    font-size:.62rem;letter-spacing:.08em;padding-top:2px;font-weight:600;
+  }
+  .spec .v{color:#c2cde0;flex:1;word-break:break-word}
+
+  .fw-row{display:flex;flex-wrap:wrap;gap:5px;margin-top:2px}
+  .fw-tag{
+    display:inline-flex;align-items:center;gap:4px;
+    font-size:.66rem;font-weight:600;
+    padding:3px 8px;border-radius:6px;
+    background:rgba(99,102,241,.1);
+    border:1px solid rgba(129,140,248,.28);
+    color:#c7d2fe;
+    cursor:default;
+  }
+  .fw-tag.primary{
+    background:linear-gradient(135deg,rgba(236,72,153,.18),rgba(99,102,241,.18));
+    border-color:rgba(236,72,153,.45);
+    color:#fbcfe8;
+    font-weight:700;
+  }
+  .fw-tag .cat{
+    font-size:.55rem;font-weight:700;letter-spacing:.08em;
+    text-transform:uppercase;opacity:.75;
+  }
+
+  /* ---------------- PAGINATION ---------------- */
+  .pager{
+    display:flex;flex-wrap:wrap;justify-content:center;align-items:center;
+    gap:7px;margin-top:34px;
+  }
+  .pager button{
+    font-family:inherit;font-size:.82rem;font-weight:600;
+    min-width:38px;height:38px;padding:0 11px;
+    background:var(--panel-2);border:1px solid var(--border);
+    color:var(--muted);border-radius:9px;cursor:pointer;transition:.16s;
+  }
+  .pager button:hover:not(:disabled){color:var(--text);border-color:var(--border-2);background:var(--panel-3)}
+  .pager button.active{
+    color:#fff;background:linear-gradient(135deg,rgba(99,102,241,.3),rgba(236,72,153,.22));
+    border-color:rgba(236,72,153,.5);
+  }
+  .pager button:disabled{opacity:.32;cursor:not-allowed}
+  .pager .gap{color:var(--dim);padding:0 3px;user-select:none}
+
+  /* ---------------- EMPTY ---------------- */
+  .empty{
+    grid-column:1/-1;text-align:center;padding:72px 20px;color:var(--muted);
+    border:1px dashed var(--border);border-radius:var(--radius);
+  }
+  .empty strong{display:block;color:var(--text);font-size:1.05rem;margin-bottom:6px}
+  .empty button{
+    margin-top:14px;padding:8px 18px;border-radius:9px;cursor:pointer;
+    background:var(--panel-3);border:1px solid var(--border-2);color:var(--text);
+    font-family:inherit;font-size:.82rem;font-weight:600;
+  }
+
+  /* ---------------- TOAST ---------------- */
+  #toast{
+    position:fixed;bottom:24px;left:50%;transform:translate(-50%,120%);
+    background:#161f31;border:1px solid var(--border-2);
+    color:var(--text);padding:12px 20px;border-radius:11px;
+    font-size:.85rem;font-weight:500;z-index:200;
+    box-shadow:0 18px 40px -14px #000;
+    transition:transform .3s cubic-bezier(.2,.9,.3,1.2);
+    display:flex;align-items:center;gap:9px;max-width:90vw;
+  }
+  #toast.show{transform:translate(-50%,0)}
+  #toast .tdot{width:8px;height:8px;border-radius:50%;background:#22c55e;flex:0 0 auto}
+
+  /* ---------------- FOOTER ---------------- */
+  footer{
+    margin-top:60px;padding:34px 20px 30px;border-top:1px solid var(--border);
+    text-align:center;color:var(--dim);font-size:.82rem;line-height:1.9;
+    position:relative;
+  }
+  .creator{
+    display:inline-flex;align-items:center;gap:11px;
+    padding:13px 24px;margin-top:14px;
+    background:linear-gradient(135deg,rgba(99,102,241,.12),rgba(236,72,153,.09),rgba(6,182,212,.09));
+    border:1px solid rgba(129,140,248,.3);
+    border-radius:999px;
+    font-size:.92rem;font-weight:600;color:var(--text);
+    letter-spacing:.01em;
+    position:relative;overflow:hidden;
+  }
+  .creator .avatar{
+    width:30px;height:30px;border-radius:50%;
+    display:grid;place-items:center;
+    font-size:.72rem;font-weight:800;letter-spacing:.02em;color:#fff;
+    background:linear-gradient(135deg,#6366f1,#ec4899 55%,#06b6d4);
+    box-shadow:0 0 14px rgba(236,72,153,.4);
+    flex:0 0 auto;
+  }
+  .creator .name{
+    background:linear-gradient(100deg,#c7d2fe,#f9a8d4 50%,#67e8f9);
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+    font-weight:700;
+  }
+  .creator .role{color:var(--muted);font-weight:500;font-size:.82rem}
+
+  /* ---------------- ASIDE FLOATING TOOLS ---------------- */
+  aside.side-tools{
+    position:fixed;
+    right:20px;
+    top:50%;
+    transform:translateY(-50%);
+    z-index:150;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    align-items:flex-end;
+  }
+
+  .side-btn{
+    position:relative;
+    display:flex;
+    align-items:center;
+    gap:0;
+    height:48px;
+    padding:0 14px;
+    border-radius:14px;
+    background:linear-gradient(180deg,#141b2b,#0f1420);
+    border:1px solid var(--border-2);
+    color:var(--text);
+    font-family:inherit;
+    font-size:.82rem;
+    font-weight:600;
+    cursor:pointer;
+    overflow:hidden;
+    box-shadow:0 10px 30px -12px #000, 0 0 0 1px rgba(255,255,255,.02) inset;
+    transition:transform .22s cubic-bezier(.2,.9,.3,1.2), border-color .2s, box-shadow .2s;
+    white-space:nowrap;
+  }
+  .side-btn .lbl{
+    max-width:0;opacity:0;overflow:hidden;
+    transition:max-width .32s ease, opacity .22s ease, margin-left .32s ease;
+    margin-left:0;
+  }
+  .side-btn:hover{
+    transform:translateX(-4px);
+    border-color:rgba(129,140,248,.5);
+    box-shadow:0 14px 34px -12px #000, 0 0 0 1px rgba(129,140,248,.15);
+  }
+  .side-btn:hover .lbl{max-width:200px;opacity:1;margin-left:9px}
+
+  .side-btn svg{
+    width:20px;height:20px;flex:0 0 auto;
+    fill:none;stroke:currentColor;stroke-width:2;
+    stroke-linecap:round;stroke-linejoin:round;
+  }
+
+  .side-btn.img{
+    color:#f9a8d4;border-color:rgba(236,72,153,.35);
+    background:linear-gradient(180deg,rgba(236,72,153,.14),rgba(236,72,153,.05));
+  }
+  .side-btn.img:hover{
+    border-color:rgba(236,72,153,.7);
+    box-shadow:0 14px 34px -12px rgba(236,72,153,.35), 0 0 0 1px rgba(236,72,153,.25);
+  }
+  .side-btn.top{
+    color:#93c5fd;border-color:rgba(59,130,246,.35);
+    background:linear-gradient(180deg,rgba(59,130,246,.14),rgba(59,130,246,.05));
+  }
+  .side-btn.top:hover{
+    border-color:rgba(59,130,246,.7);
+    box-shadow:0 14px 34px -12px rgba(59,130,246,.35), 0 0 0 1px rgba(59,130,246,.25);
+  }
+  .side-btn:disabled{opacity:.6;cursor:wait;transform:translateX(-4px)}
+
+  .side-btn .spin{
+    display:none;width:18px;height:18px;
+    border:2px solid rgba(255,255,255,.25);
+    border-top-color:currentColor;
+    border-radius:50%;
+    animation:spin .75s linear infinite;
+  }
+  .side-btn.loading .ic{display:none}
+  .side-btn.loading .spin{display:block}
+  @keyframes spin{to{transform:rotate(360deg)}}
+
+  /* capture mode — hides floating + interactive chrome */
+  body.capturing .toolbar,
+  body.capturing aside.side-tools,
+  body.capturing #toast,
+  body.capturing .active-filters,
+  body.capturing .sec-capture,
+  body.capturing #bgGlow{display:none!important}
+  body.capturing .card{animation:none!important;transform:none!important}
+  body.capturing *{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+
+  /* section-specific capture helpers */
+  body.capturing .sec[data-sec="grid"] .pager{display:none!important}
+  body.capturing .sec[data-sec="stats"] .stat:hover{transform:none!important}
+  body.capturing .sec[data-sec="frameworks"] .fw-chip:hover{transform:none!important}
+  body.capturing .sec[data-sec="header"] .eyebrow .dot{animation:none!important}
+
+  mark{background:rgba(250,204,21,.26);color:#fde68a;border-radius:3px;padding:0 2px}
+
+  /* ---------------- CAPTURE CREDIT STRIP ---------------- */
+  .capture-credit{
+    margin-top:22px;
+    padding:14px 12px 6px;
+    border-top:1px solid rgba(129,140,248,.30);
+    text-align:center;
+    font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+    font-size:.74rem;
+    font-weight:700;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:#8b98b4;
+    line-height:1.7;
+    width:100%;
+    flex:0 0 100%;
+  }
+  .capture-credit b{
+    color:#f9a8d4;
+    font-weight:800;
+    letter-spacing:.16em;
+  }
+  .capture-credit .sub-line{
+    display:block;
+    margin-top:3px;
+    font-size:.62rem;
+    font-weight:600;
+    letter-spacing:.18em;
+    color:#5d6a85;
+  }
+  body.capturing .capture-credit{display:block!important}
+
+  /* ---------------- RESPONSIVE ---------------- */
+  @media (max-width:900px){
+    aside.side-tools{right:12px;gap:8px}
+    .side-btn{padding:0 12px;height:44px}
+    .side-btn .lbl{max-width:0}
+    .fw-grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}
+    .masters{flex-direction:column;text-align:center;gap:12px}
+  }
+
+  @media (max-width:700px){
+    header{padding:40px 0 18px}
+    .wrap{padding:0 13px 60px}
+    .grid{grid-template-columns:1fr;gap:12px}
+    .toolbar{padding:11px;gap:9px}
+    select{max-width:100%;flex:1 1 140px}
+    .btn{padding:9px 12px;font-size:.78rem}
+    .spec .k{flex:0 0 66px}
+    .stats{grid-template-columns:repeat(2,1fr)}
+    .creator{padding:11px 18px;font-size:.84rem}
+    .creator .role{display:none}
+    .fw-section{padding:16px}
+    .masters{padding:16px}
+    .sec-capture{opacity:1}
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    *{animation:none!important;transition:none!important}
+    html{scroll-behavior:auto}
+  }
+</style>
+</head>
+<body>
+
+<div id="bgGlow"></div>
+
+<!-- ================= ASIDE FLOATING TOOLS ================= -->
+<aside class="side-tools" aria-label="Page tools">
+  <button class="side-btn img" id="btnImage" title="Generate full-page image (PNG)">
+    <svg class="ic" viewBox="0 0 24 24">
+      <rect x="3" y="3" width="18" height="18" rx="2"/>
+      <circle cx="8.5" cy="8.5" r="1.6"/>
+      <path d="M21 15l-5-5L5 21"/>
+    </svg>
+    <span class="spin"></span>
+    <span class="lbl">Full Page Image</span>
+  </button>
+
+  <button class="side-btn top" id="btnTop" title="Back to top">
+    <svg viewBox="0 0 24 24">
+      <path d="M12 19V5"/>
+      <path d="M5 12l7-7 7 7"/>
+    </svg>
+    <span class="lbl">Back to Top</span>
+  </button>
+</aside>
+
+<div class="wrap" id="pageWrap">
+
+  <!-- ============= HEADER SECTION ============= -->
+  <section class="sec" data-sec="header" id="secHeader">
+    <button class="sec-capture" data-target="secHeader" data-name="header" title="Capture header as image">
+      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.6"/><path d="M21 15l-5-5L5 21"/></svg>
+    </button>
+
+    <header>
+      <div class="eyebrow"><span class="dot"></span> AI Project Blueprint Library · v4 · Frameworks Edition</div>
+      <h1>1000 AI Projects — <span class="grad">Foundation to GenAI &amp; Agentic AI</span></h1>
+      <p class="sub">
+        A complete, filterable catalogue of AI use cases — classical ML foundations, cutting-edge
+        Generative AI and autonomous Agentic AI. Every project ships with a suggested LLM, UI layer
+        (React / Streamlit), Python FastAPI backend, plus a full AI framework stack including
+        LangGraph, LangChain, AutoGen, CrewAI, LlamaIndex, DSPy and more.
+      </p>
+
+      <!-- MASTER IN AI ENGINEERING banner (2 lines) -->
+      <div class="masters">
+        <div class="mi">🎓</div>
+        <div class="mt">
+          <div class="l1"><b>Master in AI Engineering</b> — Build production-grade GenAI, Agentic AI, RAG &amp; MLOps systems.</div>
+          <div class="l2">From LLM foundations to multi-agent orchestration — <em>the complete hands-on path for AI engineers</em>, covering LangGraph, LangChain, AutoGen, CrewAI, vector DBs &amp; deployment.</div>
+        </div>
+      </div>
+    </header>
+  </section>
+
+  <!-- ============= FRAMEWORK SECTION ============= -->
+  <section class="sec" data-sec="frameworks" id="secFrameworks">
+    <button class="sec-capture" data-target="secFrameworks" data-name="frameworks" title="Capture frameworks as image">
+      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.6"/><path d="M21 15l-5-5L5 21"/></svg>
+    </button>
+
+    <div class="fw-section">
+      <div class="fw-head">
+        <div class="fw-title">
+          <span class="icon">⚡</span>
+          <div>
+            AI Framework Stack
+            <small>Click any framework to filter · hover for description</small>
+          </div>
+        </div>
+        <div class="fw-count">
+          <b id="fwShown">0</b> frameworks · <b id="fwTotalProjects">0</b> tagged projects
+        </div>
+      </div>
+      <div class="fw-grid" id="fwGrid"></div>
+    </div>
+  </section>
+
+  <!-- ============= STATS SECTION ============= -->
+  <section class="sec" data-sec="stats" id="secStats">
+    <button class="sec-capture" data-target="secStats" data-name="stats" title="Capture stats as image">
+      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.6"/><path d="M21 15l-5-5L5 21"/></svg>
+    </button>
+    <div class="stats" id="stats"></div>
+  </section>
+
+  <div class="toolbar">
+    <div class="search">
+      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      <input id="search" type="search" placeholder="Search 1000 projects — title, domain, LLM, framework…" autocomplete="off">
+      <button class="clr" id="clrSearch" title="Clear">✕</button>
+    </div>
+
+    <select id="typeFilter">
+      <option value="all">All Types</option>
+      <option value="traditional">Traditional AI / ML</option>
+      <option value="genai">✦ Generative AI</option>
+      <option value="agentic">◆ Agentic AI</option>
+    </select>
+
+    <select id="frameworkFilter" class="framework">
+      <option value="all">All Frameworks</option>
+    </select>
+
+    <select id="domainFilter"><option value="all">All Domains</option></select>
+
+    <select id="perPage">
+      <option value="24">24 / page</option>
+      <option value="48" selected>48 / page</option>
+      <option value="96">96 / page</option>
+      <option value="200">200 / page</option>
+      <option value="1000">Show all 1000</option>
+    </select>
+
+    <div class="spacer"></div>
+
+    <button class="btn pdf" id="btnPDF" title="Open print dialog → Save as PDF">
+      <svg viewBox="0 0 24 24"><path d="M6 9V3h12v6"/><path d="M6 18H4v-6h16v6h-2"/><path d="M6 14h12v7H6z"/></svg>
+      PDF
+    </button>
+    <button class="btn doc" id="btnDOC" title="Download as Word document">
+      <svg viewBox="0 0 24 24"><path d="M14 2H6v20h12V6z"/><path d="M14 2v4h4"/><path d="M9 13h6M9 17h6"/></svg>
+      DOC
+    </button>
+    <button class="btn txt" id="btnTXT" title="Download as plain text">
+      <svg viewBox="0 0 24 24"><path d="M14 2H6v20h12V6z"/><path d="M14 2v4h4"/><path d="M8 12h8M8 16h5"/></svg>
+      TXT
+    </button>
+  </div>
+
+  <div class="active-filters" id="activeFilters" style="display:none"></div>
+
+  <div class="metabar">
+    <span>Showing <b id="shown">0</b> of <b id="total">1000</b> projects &nbsp;·&nbsp; <b id="filtered">1000</b> match filters</span>
+    <span><kbd>/</kbd> search &nbsp; <kbd>Esc</kbd> clear &nbsp; <kbd>Alt</kbd>+<kbd>←</kbd><kbd>→</kbd> pages</span>
+  </div>
+
+  <!-- ============= GRID SECTION ============= -->
+  <section class="sec" data-sec="grid" id="secGrid">
+    <button class="sec-capture" data-target="secGrid" data-name="projects" title="Capture visible projects as image">
+      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.6"/><path d="M21 15l-5-5L5 21"/></svg>
+    </button>
+    <div class="grid" id="grid"></div>
+  </section>
+
+  <div class="pager" id="pager"></div>
+
+  <!-- ============= FOOTER SECTION ============= -->
+  <section class="sec" data-sec="footer" id="secFooter">
+    <button class="sec-capture" data-target="secFooter" data-name="footer" title="Capture footer as image">
+      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.6"/><path d="M21 15l-5-5L5 21"/></svg>
+    </button>
+
+    <footer>
+      <div>1000 AI Projects · Foundation → GenAI → Agentic AI · Frameworks Edition</div>
+      <div>Each entry includes LLM · UI · Backend · AI Frameworks (LangGraph / LangChain / AutoGen / CrewAI) · Vector DB / Infra</div>
+      <div style="margin-top:10px;color:#8b98b4">
+        🎓 Master in AI Engineering — the complete hands-on path for AI engineers.
+      </div>
+
+      <div class="creator">
+        <span class="avatar">BK</span>
+        <span>Created By <span class="name">Balawant M Kadam</span></span>
+        <span class="role">· AI Project Blueprint</span>
+      </div>
+    </footer>
+  </section>
+</div>
+
+<div id="toast"><span class="tdot"></span><span id="toastMsg"></span></div>
+
+<script>
+/* ==================================================================
+   0. CREATOR CREDIT  (change once → updates every export)
+================================================================== */
+const CREATOR_NAME = "Balawant M Kadam";
+const CREATOR_LINE = "Created By " + CREATOR_NAME;
+
+/* ==================================================================
+   1. AI FRAMEWORK DATABASE
+================================================================== */
+const FRAMEWORKS_DB = [
+  { name:"LangGraph",     cat:"Agent",       color:"#8b5cf6", desc:"Stateful multi-agent graphs with cycles, checkpoints & human-in-loop" },
+  { name:"LangChain",     cat:"Orchestration", color:"#22c55e", desc:"Chains, tools, memory, retrievers & LLM abstraction layer" },
+  { name:"AutoGen",       cat:"Agent",       color:"#06b6d4", desc:"Microsoft multi-agent conversation framework with code exec" },
+  { name:"CrewAI",        cat:"Agent",       color:"#ec4899", desc:"Role-based autonomous agent crews with tasks and delegation" },
+  { name:"LlamaIndex",    cat:"RAG",         color:"#f59e0b", desc:"Data framework for RAG, indexing & query engines" },
+  { name:"DSPy",          cat:"Optimization", color:"#ef4444", desc:"Programmatic prompt optimization & declarative LLM pipelines" },
+  { name:"Semantic Kernel", cat:"Orchestration", color:"#3b82f6", desc:"Microsoft SDK for skills, planners & plugins" },
+  { name:"OpenAI Agents SDK", cat:"Agent",   color:"#10b981", desc:"Lightweight agents, handoffs, guardrails & tracing" },
+  { name:"Pydantic AI",   cat:"Agent",       color:"#e11d48", desc:"Type-safe agent framework built on Pydantic" },
+  { name:"Haystack",      cat:"RAG",         color:"#0ea5e9", desc:"Production NLP pipelines & retrieval" },
+  { name:"MCP",           cat:"Protocol",    color:"#a855f7", desc:"Model Context Protocol — universal tool interface" },
+  { name:"A2A Protocol",  cat:"Protocol",    color:"#14b8a6", desc:"Agent-to-Agent communication protocol" },
+  { name:"vLLM",          cat:"Serving",     color:"#8b5cf6", desc:"High-throughput LLM inference with PagedAttention" },
+  { name:"Triton Inference Server", cat:"Serving", color:"#22c55e", desc:"NVIDIA multi-framework model serving" },
+  { name:"Ray Serve",     cat:"Serving",     color:"#06b6d4", desc:"Scalable model serving on Ray" },
+  { name:"Ollama",        cat:"Serving",     color:"#ec4899", desc:"Local LLM runner for open-weight models" },
+  { name:"TGI",           cat:"Serving",     color:"#f59e0b", desc:"Hugging Face Text Generation Inference" },
+  { name:"PyTorch",       cat:"Training",    color:"#ef4444", desc:"Core deep learning framework" },
+  { name:"Hugging Face Transformers", cat:"Training", color:"#fbbf24", desc:"Models, tokenizers & training utilities" },
+  { name:"DeepSpeed",     cat:"Training",    color:"#3b82f6", desc:"Distributed training & ZeRO optimization" },
+  { name:"PEFT / LoRA",   cat:"Fine-tuning", color:"#10b981", desc:"Parameter-efficient fine-tuning adapters" },
+  { name:"Unsloth",       cat:"Fine-tuning", color:"#e11d48", desc:"Fast, memory-efficient fine-tuning" },
+  { name:"Axolotl",       cat:"Fine-tuning", color:"#8b5cf6", desc:"YAML-driven fine-tuning toolkit" },
+  { name:"TRL",           cat:"Fine-tuning", color:"#22c55e", desc:"RLHF, DPO & SFT training library" },
+  { name:"Diffusers",     cat:"Diffusion",   color:"#ec4899", desc:"Hugging Face diffusion model library" },
+  { name:"ComfyUI",       cat:"Diffusion",   color:"#06b6d4", desc:"Node-based diffusion workflow engine" },
+  { name:"InvokeAI",      cat:"Diffusion",   color:"#f59e0b", desc:"Creative diffusion studio" },
+  { name:"Guidance",      cat:"Generation",  color:"#ef4444", desc:"Constrained generation with templates" },
+  { name:"Outlines",      cat:"Generation",  color:"#3b82f6", desc:"Structured / regex-constrained generation" },
+  { name:"FAISS",         cat:"Vector",      color:"#10b981", desc:"Facebook similarity search library" },
+  { name:"ChromaDB",      cat:"Vector",      color:"#e11d48", desc:"Embedded vector database" },
+  { name:"Qdrant",        cat:"Vector",      color:"#8b5cf6", desc:"Production vector search engine" },
+  { name:"Pinecone",      cat:"Vector",      color:"#22c55e", desc:"Managed vector database" },
+  { name:"Weaviate",      cat:"Vector",      color:"#06b6d4", desc:"Vector DB with hybrid search" },
+  { name:"Milvus",        cat:"Vector",      color:"#ec4899", desc:"Distributed vector database" },
+  { name:"pgvector",      cat:"Vector",      color:"#f59e0b", desc:"Postgres vector extension" },
+  { name:"Neo4j",         cat:"Graph",       color:"#ef4444", desc:"Graph database for knowledge graphs" },
+  { name:"MLflow",        cat:"MLOps",       color:"#3b82f6", desc:"Experiment tracking & model registry" },
+  { name:"Weights & Biases", cat:"MLOps",    color:"#fbbf24", desc:"Experiment tracking & sweeps" },
+  { name:"LangSmith",     cat:"Observability", color:"#10b981", desc:"LLM tracing, evals & monitoring" },
+  { name:"LangFuse",      cat:"Observability", color:"#e11d48", desc:"Open-source LLM observability" },
+  { name:"Arize Phoenix", cat:"Observability", color:"#8b5cf6", desc:"LLM tracing & evaluation" },
+  { name:"OpenTelemetry", cat:"Observability", color:"#22c55e", desc:"Distributed tracing standard" },
+  { name:"Guardrails AI", cat:"Safety",      color:"#06b6d4", desc:"Output validation & guardrails" },
+  { name:"NeMo Guardrails", cat:"Safety",    color:"#ec4899", desc:"NVIDIA conversational guardrails" },
+  { name:"Temporal",      cat:"Workflow",    color:"#f59e0b", desc:"Durable workflow orchestration" },
+  { name:"Ray",           cat:"Distributed", color:"#ef4444", desc:"Distributed compute for AI workloads" },
+  { name:"Kubernetes",    cat:"Infra",       color:"#3b82f6", desc:"Container orchestration" },
+  { name:"Docker",        cat:"Infra",       color:"#10b981", desc:"Containerization platform" },
+  { name:"Kafka",         cat:"Streaming",   color:"#e11d48", desc:"Event streaming platform" },
+  { name:"Celery",        cat:"Async",       color:"#8b5cf6", desc:"Distributed task queue" },
+  { name:"FastAPI",       cat:"Backend",     color:"#22c55e", desc:"Python async web framework" },
+  { name:"Pydantic",      cat:"Backend",     color:"#06b6d4", desc:"Data validation for Python" },
+  { name:"scikit-learn",  cat:"Classical ML", color:"#ec4899", desc:"Classical ML algorithms" },
+  { name:"XGBoost",       cat:"Classical ML", color:"#f59e0b", desc:"Gradient boosting library" },
+  { name:"LightGBM",      cat:"Classical ML", color:"#ef4444", desc:"Fast gradient boosting" },
+  { name:"pandas",        cat:"Data",        color:"#3b82f6", desc:"Data manipulation library" },
+  { name:"NumPy",         cat:"Data",        color:"#10b981", desc:"Numerical computing" },
+  { name:"Polars",        cat:"Data",        color:"#e11d48", desc:"Fast DataFrame library" },
+  { name:"DuckDB",        cat:"Data",        color:"#8b5cf6", desc:"In-process analytical database" },
+  { name:"Streamlit",     cat:"UI",          color:"#22c55e", desc:"Rapid Python data apps" },
+  { name:"Gradio",        cat:"UI",          color:"#06b6d4", desc:"Quick ML demos in Python" },
+  { name:"React",         cat:"UI",          color:"#ec4899", desc:"Component UI library" },
+  { name:"Next.js",       cat:"UI",          color:"#f59e0b", desc:"React full-stack framework" },
+  { name:"Vercel AI SDK", cat:"UI",          color:"#ef4444", desc:"Streaming AI UI toolkit" },
+  { name:"React Flow",    cat:"UI",          color:"#3b82f6", desc:"Node-based agent graph UI" }
+];
+
+const FW_MAP = {};
+FRAMEWORKS_DB.forEach(f => FW_MAP[f.name] = f);
+
+/* ==================================================================
+   2. DOMAINS
+================================================================== */
+const DOMAINS = [
+  { name:"Healthcare", subjects:["Clinical Notes","Diagnostic Imaging","Patient Triage","Drug Interaction Checker","EHR Records","Remote Patient Monitoring"] },
+  { name:"Finance & Banking", subjects:["Fraud Detection","Credit Scoring","Portfolio Analytics","Loan Underwriting","Transaction Reconciliation","Market Sentiment"] },
+  { name:"Retail & E-commerce", subjects:["Product Recommendations","Demand Forecasting","Visual Search","Dynamic Pricing","Cart Abandonment","Inventory Optimization"] },
+  { name:"Education", subjects:["Adaptive Learning Paths","Essay Grading","Tutoring Assistant","Curriculum Generator","Student Engagement Analytics","Language Learning"] },
+  { name:"Manufacturing", subjects:["Predictive Maintenance","Quality Inspection","Supply Chain Planning","Robotic Process Control","Defect Detection","Factory Digital Twin"] },
+  { name:"Logistics & Supply Chain", subjects:["Route Optimization","Fleet Management","Warehouse Robotics","Last-Mile Delivery","Freight Document Processing","Inventory Replenishment"] },
+  { name:"Cybersecurity", subjects:["Threat Detection","Phishing Analysis","Vulnerability Triage","Security Log Analysis","Incident Response","Malware Classification"] },
+  { name:"Marketing & Advertising", subjects:["Campaign Copy Generation","Audience Segmentation","Ad Creative Optimization","SEO Content Planning","Social Listening","Attribution Modeling"] },
+  { name:"Customer Support", subjects:["Ticket Classification","Virtual Support Agent","Sentiment Routing","Knowledge Base Search","Escalation Prediction","Voice Support Bot"] },
+  { name:"Legal & Compliance", subjects:["Contract Review","Legal Research","Policy Compliance","E-Discovery","Clause Extraction","Regulatory Monitoring"] },
+  { name:"Human Resources", subjects:["Resume Screening","Interview Assistant","Employee Onboarding","Attrition Prediction","Skills Gap Analysis","Performance Review Summarizer"] },
+  { name:"Agriculture", subjects:["Crop Disease Detection","Yield Prediction","Precision Irrigation","Pest Monitoring","Soil Health Analytics","Farm Drone Imagery"] },
+  { name:"Energy & Utilities", subjects:["Grid Load Forecasting","Renewable Output Prediction","Asset Health Monitoring","Energy Trading","Outage Detection","Smart Meter Analytics"] },
+  { name:"Government & Public Sector", subjects:["Citizen Service Assistant","Document Processing","Policy Impact Analysis","Emergency Response","Permit Review","Public Feedback Mining"] },
+  { name:"Media & Entertainment", subjects:["Content Recommendation","Script Generation","Video Editing Assistant","Music Generation","Subtitle Localization","Content Moderation"] },
+  { name:"Gaming", subjects:["NPC Dialogue Systems","Procedural Level Generation","Player Behavior Analytics","Matchmaking","Anti-Cheat Detection","Game Testing Bots"] },
+  { name:"Robotics", subjects:["Pick-and-Place Control","SLAM Navigation","Manipulation Planning","Human-Robot Collaboration","Swarm Coordination","Sim-to-Real Transfer"] },
+  { name:"Autonomous Vehicles", subjects:["Perception Fusion","Trajectory Prediction","Driver Monitoring","HD Map Generation","Scenario Simulation","Fleet Teleoperation"] },
+  { name:"Scientific Research", subjects:["Literature Synthesis","Protein Structure Prediction","Experiment Design","Lab Automation","Materials Discovery","Research Data Analysis"] },
+  { name:"Climate & Environment", subjects:["Emissions Monitoring","Wildfire Prediction","Biodiversity Tracking","Carbon Accounting","Weather Forecasting","Ocean Data Analytics"] },
+  { name:"Telecommunications", subjects:["Network Optimization","Churn Prediction","Fault Diagnosis","Customer Care Assistant","5G Slice Management","Spectrum Analytics"] },
+  { name:"Real Estate & Construction", subjects:["Property Valuation","Site Safety Monitoring","Lease Abstraction","BIM Analysis","Construction Scheduling","Tenant Support"] },
+  { name:"Travel & Hospitality", subjects:["Itinerary Planning","Dynamic Pricing","Review Analytics","Virtual Concierge","Demand Forecasting","Multilingual Support"] },
+  { name:"Insurance", subjects:["Claims Automation","Risk Assessment","Policy Comparison","Damage Estimation","Fraud Detection","Underwriting Copilot"] },
+  { name:"Software Engineering", subjects:["Code Review","Test Generation","Incident Root Cause","Documentation","Legacy Migration","Developer Copilot"] }
+];
+
+/* ==================================================================
+   3. LEVELS — exactly 1000
+================================================================== */
+const LEVELS = [
+  { key:"foundation",   label:"Foundation",       color:"#22c55e", count:120, type:"traditional" },
+  { key:"beginner",     label:"Beginner",         color:"#14b8a6", count:150, type:"traditional" },
+  { key:"intermediate", label:"Intermediate",     color:"#3b82f6", count:180, type:"traditional" },
+  { key:"advanced",     label:"Advanced",         color:"#a855f7", count:150, type:"traditional" },
+  { key:"expert",       label:"Expert",           color:"#f59e0b", count:100, type:"traditional" },
+  { key:"research",     label:"Cutting-Edge",     color:"#ef4444", count:60,  type:"traditional" },
+  { key:"genai",        label:"GenAI Advanced",   color:"#ec4899", count:120, type:"genai" },
+  { key:"agentic",      label:"Agentic Advanced", color:"#06b6d4", count:120, type:"agentic" }
+];
+
+/* ==================================================================
+   4. DELIVERABLES
+================================================================== */
+const DELIVERABLES = {
+  foundation:  ["Explorer","Classifier","Predictor","Dashboard","Basic Chatbot","Rule Engine","Data Pipeline","Visualizer","Checker","Tutorial Notebook"],
+  beginner:    ["Q&A Bot","Summarizer","Recommender","Analyzer","Assistant","Search Engine","Alert System","Report Generator"],
+  intermediate:["RAG Assistant","Agent","Copilot","Pipeline","Knowledge Base","Workflow Automation","Evaluation Harness","API Service"],
+  advanced:    ["Multi-Agent System","Autonomous Workflow","Fine-Tuned Model","Knowledge Graph Engine","Real-Time Platform","Orchestration Layer","Tool-Calling Agent","Hybrid RAG Engine"],
+  expert:      ["Self-Improving Agent Swarm","Multi-Modal Reasoning Engine","Enterprise Orchestration Platform","Digital Twin Simulator","Adaptive Decision System","Federated Learning Platform"],
+  research:    ["Neuro-Symbolic Reasoner","Continual Learning Agent","Causal Discovery Engine","Alignment Sandbox","Emergent Behavior Testbed","Autonomous Research Lab"],
+  genai:       ["Studio","Pipeline","Engine","Platform","Generator","Toolkit","Service","Factory"],
+  agentic:     ["Swarm","Orchestrator","Framework","Platform","Agent Team","System","Mesh","Runtime"]
+};
+
+const QUALIFIERS = ["Enterprise","Real-Time","Multilingual","Edge-Optimized","Privacy-Preserving","Compliance-Ready","Low-Latency","Offline-First","Multi-Tenant","High-Availability","Self-Healing","Observable"];
+
+/* ==================================================================
+   5. GENAI / AGENTIC SUBJECTS
+================================================================== */
+const GENAI_SUBJECTS = [
+  "Product Photography","Fashion Design","Interior Design","Game Art","Film Pre-Visualization",
+  "Music Production","Podcast Production","Voice Dubbing","News Generation","Sports Highlights",
+  "E-learning Content","Training Videos","Technical Documentation","API Documentation","Code Migration",
+  "Test Automation","Data Augmentation","Medical Imaging","Drug Discovery","Material Design",
+  "Architecture Rendering","Virtual Try-On","Personal Styling","Recipe Generation","Menu Design",
+  "Packaging Design","Brand Identity","Ad Creative","Social Media Content","Email Campaigns",
+  "Landing Pages","Product Descriptions","Catalog Enrichment","Review Summarization","Customer Insights",
+  "Competitive Analysis","Trend Forecasting","Story Generation","Script Writing","Concept Art"
+];
+
+const AGENTIC_SUBJECTS = [
+  "Customer Support","Sales Development","Recruiting","Onboarding","IT Helpdesk",
+  "DevOps","Security Operations","Threat Hunting","Incident Response","Fraud Investigation",
+  "Compliance Monitoring","Contract Review","Legal Research","Patent Analysis","Financial Analysis",
+  "Portfolio Management","Risk Assessment","Trading","Market Research","Competitive Intelligence",
+  "Due Diligence","Supply Chain","Logistics","Warehouse Operations","Field Service",
+  "Manufacturing Operations","Quality Assurance","Research & Development","Scientific Discovery","Clinical Trials",
+  "Patient Care","Medical Diagnosis","Personal Finance","Travel Planning","Event Planning",
+  "Project Management","Team Coordination","Knowledge Management","Document Processing","Data Pipeline"
+];
+
+/* ==================================================================
+   6. TECH POOLS
+================================================================== */
+const LLM_POOL = {
+  foundation:  ["GPT-4o mini","Llama 3.2 3B (local)","Gemini 2.0 Flash","Mistral 7B","Phi-4 mini","Claude 3.5 Haiku"],
+  beginner:    ["GPT-4o mini","Claude 3.5 Haiku","Gemini 1.5 Flash","Llama 3.1 8B","Qwen 2.5 7B","Mistral Small"],
+  intermediate:["GPT-4o","Claude 3.5 Sonnet","Gemini 1.5 Pro","Llama 3.3 70B","Qwen 2.5 72B","Mistral Large"],
+  advanced:    ["GPT-4o","Claude 3.7 Sonnet","Gemini 2.0 Pro","Llama 3.3 70B","DeepSeek-V3","Mixtral 8x22B"],
+  expert:      ["GPT-4.1 / o3-mini","Claude 3.7 Sonnet","Gemini 2.5 Pro","DeepSeek-R1","Llama 4 Scout","Command R+"],
+  research:    ["o3 / o4-mini (reasoning)","DeepSeek-R1","Claude 3.7 Sonnet (extended thinking)","Gemini 2.5 Pro","Custom fine-tuned 70B","Open-weight MoE (custom)"],
+  genai:       ["GPT-4o + DALL·E 3","Claude 3.7 Sonnet","Gemini 2.5 Pro","FLUX.1 Pro (diffusion)","Stable Diffusion 3.5 Large","Runway Gen-3 / Sora API","ElevenLabs + Whisper v3","Suno / Udio (music)"],
+  agentic:     ["GPT-4o (tool-calling)","Claude 3.7 Sonnet (extended thinking)","Gemini 2.5 Pro","o3 / o4-mini (reasoning)","DeepSeek-R1","Llama 4 Scout (agentic)","Command R+ (RAG-native)","Qwen 2.5 72B (function calling)"]
+};
+
+const UI_POOL = {
+  foundation:  ["Streamlit","Streamlit + Plotly","Gradio","Streamlit + Pandas","Jupyter + ipywidgets","Streamlit Multi-page"],
+  beginner:    ["Streamlit","Gradio","Streamlit + FastAPI","Streamlit + Session State","React + Vite (basic)","Streamlit Chat UI"],
+  intermediate:["React + Vite + Tailwind","Streamlit + FastAPI","React + shadcn/ui","Next.js + Tailwind","Streamlit + WebSocket streaming","React + TanStack Query"],
+  advanced:    ["React + Vite + Tailwind + Zustand","Next.js 14 App Router + shadcn/ui","React + WebSocket streaming","React + React Flow (agent graph)","Next.js + Server Actions","React + Monaco Editor"],
+  expert:      ["Next.js + shadcn/ui + tRPC","React + Micro-frontends","React + Three.js (3D viz)","Next.js + Edge Runtime","React + Real-time collaboration","Custom Design System + React"],
+  research:    ["React + D3 / Observable","React + Three.js + WebGL","Custom React research console","Next.js + Jupyter embed","React + Live experiment tracker","Streamlit + Custom PyTorch viz"],
+  genai:       ["Next.js 14 + shadcn/ui (gallery)","React + Three.js (3D preview)","React + Framer Motion","Streamlit + Gradio mix","React + Monaco Editor (code gen)","Next.js + Server-Sent Events (streaming)","React + Custom canvas editor","Next.js + Vercel AI SDK"],
+  agentic:     ["React + React Flow (agent graph)","Next.js 14 App Router + shadcn/ui","React + WebSocket live agent stream","React + Monaco (code agent)","Custom observability dashboard","React + Zustand + TanStack Query","Next.js + Server-Sent Events","React + D3 agent topology"]
+};
+
+const BACKEND_POOL = {
+  foundation:  ["Python · FastAPI + Uvicorn","Python · FastAPI + SQLite","Python · Flask + Gunicorn","Python · FastAPI + Pandas","Python · Jupyter + FastAPI","Python · FastAPI (single-file)"],
+  beginner:    ["Python · FastAPI + Uvicorn","Python · FastAPI + SQLite + SQLAlchemy","Python · FastAPI + BackgroundTasks","Python · FastAPI + Redis cache","Python · FastAPI + Pydantic v2","Python · FastAPI + Docker"],
+  intermediate:["Python · FastAPI + PostgreSQL + pgvector","Python · FastAPI + Celery + Redis","Python · FastAPI + WebSockets","Python · FastAPI + SQLAlchemy 2.0 + Alembic","Python · FastAPI + MinIO / S3","Python · FastAPI + APScheduler"],
+  advanced:    ["Python · FastAPI + Celery + RabbitMQ + Postgres","Python · FastAPI + Kafka + Redis Streams","Python · FastAPI + Ray Serve","Python · FastAPI + Temporal workflows","Python · FastAPI + Kubernetes + Helm","Python · FastAPI + gRPC microservices"],
+  expert:      ["Python · FastAPI + Kafka + Flink + Postgres","Python · FastAPI + Ray + KubeRay","Python · FastAPI + Temporal + Saga patterns","Python · FastAPI + Multi-region Postgres + Redis Cluster","Python · FastAPI + Service Mesh (Istio)","Python · FastAPI + Event Sourcing + CQRS"],
+  research:    ["Python · FastAPI + Ray Train + MLflow","Python · FastAPI + DeepSpeed + NCCL","Python · FastAPI + Custom CUDA workers","Python · FastAPI + Distributed tracing (OTel)","Python · FastAPI + Experiment orchestration","Python · FastAPI + HPC scheduler integration"],
+  genai:       ["Python · FastAPI + Celery + Redis + S3","Python · FastAPI + Ray Serve (multi-model)","Python · FastAPI + vLLM workers","Python · FastAPI + Modal / RunPod GPU","Python · FastAPI + Triton Inference Server","Python · FastAPI + GPU autoscaling (KEDA)","Python · FastAPI + WebSocket streaming","Python · FastAPI + ComfyUI backend"],
+  agentic:     ["Python · FastAPI + LangGraph runtime","Python · FastAPI + Temporal workflows","Python · FastAPI + Kafka + Redis Streams","Python · FastAPI + Ray + KubeRay","Python · FastAPI + gRPC microservices","Python · FastAPI + Celery + RabbitMQ","Python · FastAPI + WebSocket agent stream","Python · FastAPI + Sandboxed code exec"]
+};
+
+const FRAMEWORK_SETS = {
+  foundation: {
+    primary:   ["scikit-learn","Hugging Face Transformers","pandas","NumPy"],
+    secondary: ["Streamlit","FastAPI","Pydantic","Docker","Gradio","XGBoost","LightGBM","Polars","DuckDB","MLflow"]
+  },
+  beginner: {
+    primary:   ["LangChain","LlamaIndex","Hugging Face Transformers"],
+    secondary: ["ChromaDB","FAISS","Streamlit","Gradio","FastAPI","Pydantic","OpenTelemetry","MLflow","Polars","DuckDB"]
+  },
+  intermediate: {
+    primary:   ["LangChain","LangGraph","LlamaIndex","DSPy"],
+    secondary: ["FAISS","ChromaDB","Qdrant","pgvector","MLflow","FastAPI","Docker","LangSmith","LangFuse","Pydantic","Pydantic AI","OpenAI Agents SDK","PEFT / LoRA"]
+  },
+  advanced: {
+    primary:   ["LangGraph","CrewAI","AutoGen","LlamaIndex"],
+    secondary: ["vLLM","Ray Serve","Ray","Qdrant","Neo4j","Temporal","Kubernetes","Docker","MLflow","LangSmith","LangFuse","Arize Phoenix","Pydantic AI","DSPy","MCP"]
+  },
+  expert: {
+    primary:   ["LangGraph","AutoGen","DSPy","Semantic Kernel"],
+    secondary: ["Ray","vLLM","Triton Inference Server","Neo4j","Kafka","OpenTelemetry","Temporal","Guardrails AI","NeMo Guardrails","A2A Protocol","MCP","Unsloth","Axolotl","TRL"]
+  },
+  research: {
+    primary:   ["PyTorch","DSPy","LangGraph","Ray"],
+    secondary: ["DeepSpeed","Weights & Biases","vLLM","PEFT / LoRA","TRL","Axolotl","Unsloth","Triton Inference Server","OpenTelemetry","NeMo Guardrails"]
+  },
+  genai: {
+    primary:   ["Diffusers","ComfyUI","LangChain","LlamaIndex"],
+    secondary: ["DSPy","vLLM","Triton Inference Server","Ray","MLflow","Weights & Biases","Guidance","Outlines","InvokeAI","PEFT / LoRA","Unsloth","FastAPI","Celery","Vercel AI SDK","Kafka"]
+  },
+  agentic: {
+    primary:   ["LangGraph","CrewAI","AutoGen","OpenAI Agents SDK"],
+    secondary: ["DSPy","Semantic Kernel","Pydantic AI","Temporal","Ray","Kafka","OpenTelemetry","MCP","A2A Protocol","Guardrails AI","NeMo Guardrails","LangSmith","LangFuse","Arize Phoenix","Celery"]
+  }
+};
+
+const STORAGE_POOL = ["FAISS","ChromaDB","Pinecone","Weaviate","Qdrant","Milvus","pgvector","Neo4j","Elasticsearch","DuckDB","LanceDB","OpenSearch"];
+
+/* ==================================================================
+   7. DESCRIPTION TEMPLATES
+================================================================== */
+const DESC_TPL = {
+  foundation:  (t,s,d,fw)=> "Build a " + t + " using " + fw + " that applies classical machine learning and lightweight LLM calls to " + s + " within the " + d + " domain. Focus on data cleaning, feature engineering, baseline metrics and a clear evaluation notebook.",
+  beginner:    (t,s,d,fw)=> "Create a working " + t + " with " + fw + " for " + s + " using prompt engineering, structured outputs and basic retrieval, wrapped in a simple " + d + " demo with a clean UI.",
+  intermediate:(t,s,d,fw)=> "Design a production-ready " + t + " with " + fw + " that chains retrieval, tool calls and LLM reasoning over " + s + ", exposed through a typed API with tracing, caching and evaluation.",
+  advanced:    (t,s,d,fw)=> "Architect a " + t + " with " + fw + " orchestrating multiple specialised agents over " + s + ", including long-term memory, tool use, guardrails, human-in-the-loop checkpoints and observability.",
+  expert:      (t,s,d,fw)=> "Engineer an enterprise-grade " + t + " with " + fw + " for " + s + ": distributed orchestration, fine-tuned or distilled models, cost controls, SLA monitoring, security review and full audit trails.",
+  research:    (t,s,d,fw)=> "Push the frontier with a " + t + " using " + fw + " exploring novel methods for " + s + " — reproducible benchmarks, ablation studies, failure-mode analysis and an open evaluation harness.",
+  genai:       (t,s,d,fw)=> "Build a production-grade GenAI " + t + " powered by " + fw + " that generates " + s.toLowerCase() + " assets for " + d + ", combining multi-modal models, fine-tuning or LoRA adaptation, prompt pipelines, safety guardrails and a human review loop.",
+  agentic:     (t,s,d,fw)=> "Design an agentic " + t + " built on " + fw + " where autonomous LLM agents plan, call tools, maintain memory and collaborate to handle " + s.toLowerCase() + " workflows in " + d + ", with reflection, guardrails, human-in-the-loop checkpoints and full observability."
+};
+
+/* ==================================================================
+   8. PROJECT GENERATOR
+================================================================== */
+const SUBJECTS = [];
+DOMAINS.forEach(d => d.subjects.forEach(s => SUBJECTS.push({ domain:d.name, subject:s })));
+const S = SUBJECTS.length;
+
+function pick(arr, i){ return arr[((i % arr.length) + arr.length) % arr.length]; }
+
+function buildFrameworkList(levelKey, i){
+  const set = FRAMEWORK_SETS[levelKey];
+  const primaries = set.primary;
+
+  const primaryCount = (i % 2) + 1;
+  const primaryPicked = [];
+  for(let k = 0; k < primaryCount; k++){
+    const fw = pick(primaries, i + k * 3);
+    if(!primaryPicked.includes(fw)) primaryPicked.push(fw);
+  }
+
+  const secondaryCount = 2 + (i % 2);
+  const secondaryPicked = [];
+  for(let k = 0; k < secondaryCount; k++){
+    const fw = pick(set.secondary, i + k * 5);
+    if(!primaryPicked.includes(fw) && !secondaryPicked.includes(fw)){
+      secondaryPicked.push(fw);
+    }
+  }
+
+  return primaryPicked.concat(secondaryPicked);
+}
+
+function buildTraditional(lvl, li){
+  const out = [];
+  const del = DELIVERABLES[lvl.key];
+  const llm = LLM_POOL[lvl.key];
+  const ui  = UI_POOL[lvl.key];
+  const be  = BACKEND_POOL[lvl.key];
+
+  for(let i = 0; i < lvl.count; i++){
+    const base   = SUBJECTS[(i + li * 23) % S];
+    const suffix = pick(del, i);
+    const wrap   = Math.floor(i / S);
+    const qual   = wrap > 0 ? pick(QUALIFIERS, i + li * 7) : "";
+    const title  = base.subject + " " + suffix + (qual ? " · " + qual : "");
+    const fwList = buildFrameworkList(lvl.key, i);
+    const fwPrimary = fwList[0];
+
+    out.push({
+      level: lvl.key, levelLabel: lvl.label, color: lvl.color,
+      type: "traditional",
+      domain: base.domain, subject: base.subject,
+      title: title,
+      desc: DESC_TPL[lvl.key](suffix, base.subject.toLowerCase(), base.domain, fwPrimary),
+      llm: pick(llm, i + li),
+      ui: pick(ui, i + li * 3),
+      backend: pick(be, i + li * 5),
+      frameworks: fwList,
+      primaryFramework: fwPrimary,
+      storage: [pick(STORAGE_POOL, i + li), pick(STORAGE_POOL, i + li + 7)]
+        .filter((v, idx, a) => a.indexOf(v) === idx).join(" · ")
+    });
+  }
+  return out;
+}
+
+function buildSpecialized(lvl, li, subjectsPool, domainLabel){
+  const out = [];
+  const del = DELIVERABLES[lvl.key];
+  const llm = LLM_POOL[lvl.key];
+  const ui  = UI_POOL[lvl.key];
+  const be  = BACKEND_POOL[lvl.key];
+  const P   = subjectsPool.length;
+
+  for(let i = 0; i < lvl.count; i++){
+    const subject = subjectsPool[(i + li * 13) % P];
+    const suffix  = pick(del, i);
+    const wrap    = Math.floor(i / P);
+    const qual    = wrap > 0 ? pick(QUALIFIERS, i + li * 5) : "";
+    const title   = subject + " " + suffix + (qual ? " · " + qual : "");
+    const fwList  = buildFrameworkList(lvl.key, i);
+    const fwPrimary = fwList[0];
+
+    out.push({
+      level: lvl.key, levelLabel: lvl.label, color: lvl.color,
+      type: lvl.type,
+      domain: domainLabel, subject: subject,
+      title: title,
+      desc: DESC_TPL[lvl.key](suffix, subject, domainLabel, fwPrimary),
+      llm: pick(llm, i + li * 2),
+      ui: pick(ui, i + li * 3),
+      backend: pick(be, i + li * 4),
+      frameworks: fwList,
+      primaryFramework: fwPrimary,
+      storage: [pick(STORAGE_POOL, i + li + 3), pick(STORAGE_POOL, i + li + 11)]
+        .filter((v, idx, a) => a.indexOf(v) === idx).join(" · ")
+    });
+  }
+  return out;
+}
+
+const PROJECTS = (() => {
+  const out = [];
+  let id = 1;
+  const seen = new Set();
+
+  LEVELS.forEach((lvl, li) => {
+    let chunk;
+    if(lvl.type === "genai")        chunk = buildSpecialized(lvl, li, GENAI_SUBJECTS,   "Generative AI");
+    else if(lvl.type === "agentic") chunk = buildSpecialized(lvl, li, AGENTIC_SUBJECTS, "Agentic AI");
+    else                            chunk = buildTraditional(lvl, li);
+
+    chunk.forEach(p => {
+      let t = p.title;
+      if(seen.has(t)) t = t + " (v" + (Math.floor(Math.random()*3)+2) + ")";
+      seen.add(t);
+      p.title = t;
+      p.id = id++;
+      out.push(p);
+    });
+  });
+
+  return out;
+})();
+
+/* ==================================================================
+   9. STATE
+================================================================== */
+let state = {
+  level: "all",
+  type: "all",
+  domain: "all",
+  framework: "all",
+  query: "",
+  page: 1,
+  perPage: 48
+};
+
+/* ==================================================================
+   10. DOM REFS
+================================================================== */
+const gridEl       = document.getElementById("grid");
+const pagerEl      = document.getElementById("pager");
+const statsEl      = document.getElementById("stats");
+const searchEl     = document.getElementById("search");
+const clrBtn       = document.getElementById("clrSearch");
+const domainSel    = document.getElementById("domainFilter");
+const typeSel      = document.getElementById("typeFilter");
+const frameworkSel = document.getElementById("frameworkFilter");
+const perPageSel   = document.getElementById("perPage");
+const shownEl      = document.getElementById("shown");
+const totalEl      = document.getElementById("total");
+const filteredEl   = document.getElementById("filtered");
+const toastEl      = document.getElementById("toast");
+const toastMsg     = document.getElementById("toastMsg");
+const pageWrap     = document.getElementById("pageWrap");
+const fwGrid       = document.getElementById("fwGrid");
+const fwShownEl    = document.getElementById("fwShown");
+const fwTotalEl    = document.getElementById("fwTotalProjects");
+const activeFiltersEl = document.getElementById("activeFilters");
+
+/* ==================================================================
+   11. HELPERS
+================================================================== */
+function esc(str){
+  return String(str).replace(/[&<>"']/g, c => (
+    {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]
+  ));
+}
+function hl(text, q){
+  const safe = esc(text);
+  if(!q) return safe;
+  const rx = new RegExp("(" + q.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + ")", "gi");
+  return safe.replace(rx, "<mark>$1</mark>");
+}
+let toastTimer;
+function toast(msg){
+  toastMsg.textContent = msg;
+  toastEl.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toastEl.classList.remove("show"), 3400);
+}
+function typeLabel(t){
+  return t === "genai" ? "GenAI" : t === "agentic" ? "Agentic" : "Traditional";
+}
+
+/* RGBA helpers (no color-mix) */
+function hexToRgb(hex){
+  const h = hex.replace("#","");
+  const n = parseInt(h.length === 3 ? h.split("").map(c=>c+c).join("") : h, 16);
+  return { r:(n>>16)&255, g:(n>>8)&255, b:n&255 };
+}
+function rgba(hex, a){
+  const c = hexToRgb(hex);
+  return "rgba(" + c.r + "," + c.g + "," + c.b + "," + a + ")";
+}
+
+/* ==================================================================
+   12. FRAMEWORK COUNTS
+================================================================== */
+const FW_COUNTS = {};
+FRAMEWORKS_DB.forEach(f => FW_COUNTS[f.name] = 0);
+PROJECTS.forEach(p => {
+  (p.frameworks || []).forEach(fw => {
+    if(FW_COUNTS[fw] !== undefined) FW_COUNTS[fw]++;
+  });
+});
+
+/* ==================================================================
+   13. RENDER — FRAMEWORK SHOWCASE
+================================================================== */
+function renderFrameworks(){
+  const used = FRAMEWORKS_DB
+    .filter(f => FW_COUNTS[f.name] > 0)
+    .sort((a, b) => FW_COUNTS[b.name] - FW_COUNTS[a.name]);
+
+  fwShownEl.textContent = used.length;
+  fwTotalEl.textContent = PROJECTS.reduce((n, p) => n + (p.frameworks?.length || 0), 0);
+
+  fwGrid.innerHTML = used.map(f => {
+    const active = state.framework === f.name ? " active" : "";
+    return '<button class="fw-chip' + active + '" data-fw="' + esc(f.name) + '" ' +
+             'style="--fw-color:' + f.color + '" title="' + esc(f.desc) + '">' +
+      '<span class="n">' + FW_COUNTS[f.name] + '</span>' +
+      '<span class="name">' + esc(f.name) +
+        '<span class="cat">' + esc(f.cat) + '</span>' +
+      '</span>' +
+      '<span class="desc">' + esc(f.desc) + '</span>' +
+    '</button>';
+  }).join("");
+}
+
+fwGrid.addEventListener("click", e => {
+  const chip = e.target.closest(".fw-chip");
+  if(!chip) return;
+  const fw = chip.dataset.fw;
+  state.framework = (state.framework === fw) ? "all" : fw;
+  state.page = 1;
+  frameworkSel.value = state.framework;
+  renderFrameworks();
+  renderActiveFilters();
+  render();
+  document.querySelector(".toolbar").scrollIntoView({ behavior:"smooth", block:"start" });
+});
+
+/* ==================================================================
+   14. RENDER — STATS
+================================================================== */
+function renderStats(){
+  const counts = {};
+  LEVELS.forEach(l => counts[l.key] = 0);
+  PROJECTS.forEach(p => counts[p.level]++);
+
+  let html = '<div class="stat ' + (state.level === "all" ? "active" : "") +
+             '" data-level="all" style="--sc:#818cf8">' +
+             '<div class="n">' + PROJECTS.length + '</div>' +
+             '<div class="l">All Projects</div></div>';
+
+  LEVELS.forEach(l => {
+    html += '<div class="stat ' + (state.level === l.key ? "active" : "") +
+            '" data-level="' + l.key + '" style="--sc:' + l.color + '">' +
+            '<div class="n">' + counts[l.key] + '</div>' +
+            '<div class="l">' + l.label + '</div></div>';
+  });
+
+  statsEl.innerHTML = html;
+}
+
+statsEl.addEventListener("click", e => {
+  const card = e.target.closest(".stat");
+  if(!card) return;
+  state.level = card.dataset.level;
+  state.page = 1;
+  renderStats();
+  renderActiveFilters();
+  render();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+
+/* ==================================================================
+   15. INIT — DOMAIN + FRAMEWORK SELECT
+================================================================== */
+(function initDomains(){
+  const names = [...new Set(PROJECTS.map(p => p.domain))].sort();
+  names.forEach(n => {
+    const o = document.createElement("option");
+    o.value = n; o.textContent = n;
+    domainSel.appendChild(o);
+  });
+})();
+
+(function initFrameworkSelect(){
+  const used = FRAMEWORKS_DB
+    .filter(f => FW_COUNTS[f.name] > 0)
+    .sort((a, b) => FW_COUNTS[b.name] - FW_COUNTS[a.name]);
+  used.forEach(f => {
+    const o = document.createElement("option");
+    o.value = f.name;
+    o.textContent = f.name + " (" + FW_COUNTS[f.name] + ")";
+    frameworkSel.appendChild(o);
+  });
+})();
+
+/* ==================================================================
+   16. RENDER — ACTIVE FILTER PILLS
+================================================================== */
+function renderActiveFilters(){
+  const pills = [];
+
+  if(state.level !== "all"){
+    const l = LEVELS.find(x => x.key === state.level);
+    pills.push({ key:"level", label: l ? l.label : state.level });
+  }
+  if(state.type !== "all"){
+    pills.push({ key:"type", label: typeLabel(state.type) });
+  }
+  if(state.domain !== "all"){
+    pills.push({ key:"domain", label: state.domain });
+  }
+  if(state.framework !== "all"){
+    pills.push({ key:"framework", label: "⚡ " + state.framework });
+  }
+  if(state.query.trim()){
+    pills.push({ key:"query", label: '“' + state.query.trim() + '”' });
+  }
+
+  if(pills.length === 0){
+    activeFiltersEl.style.display = "none";
+    return;
+  }
+
+  activeFiltersEl.style.display = "flex";
+  activeFiltersEl.innerHTML =
+    '<span class="lbl">Active:</span>' +
+    pills.map(p =>
+      '<span class="pill">' + esc(p.label) +
+        '<button data-clear="' + p.key + '" title="Remove filter">✕</button>' +
+      '</span>'
+    ).join("") +
+    '<button class="pill" data-clear="all" style="cursor:pointer">Clear all</button>';
+}
+
+activeFiltersEl.addEventListener("click", e => {
+  const btn = e.target.closest("button[data-clear]");
+  if(!btn) return;
+  const key = btn.dataset.clear;
+
+  if(key === "all"){
+    window.clearAllFilters();
+    return;
+  } else if(key === "level"){
+    state.level = "all"; renderStats();
+  } else if(key === "type"){
+    state.type = "all"; typeSel.value = "all";
+    typeSel.classList.remove("genai","agentic");
+  } else if(key === "domain"){
+    state.domain = "all"; domainSel.value = "all";
+  } else if(key === "framework"){
+    state.framework = "all"; frameworkSel.value = "all";
+    renderFrameworks();
+  } else if(key === "query"){
+    state.query = ""; searchEl.value = ""; clrBtn.classList.remove("show");
+  }
+
+  state.page = 1;
+  renderActiveFilters();
+  render();
+});
+
+/* ==================================================================
+   17. RENDER — CARDS
+================================================================== */
+function render(){
+  const list = getFiltered();
+  const totalPages = Math.max(1, Math.ceil(list.length / state.perPage));
+  if(state.page > totalPages) state.page = totalPages;
+
+  const start = (state.page - 1) * state.perPage;
+  const slice = list.slice(start, start + state.perPage);
+  const q = state.query.trim();
+
+  if(slice.length === 0){
+    gridEl.innerHTML = '<div class="empty">' +
+      '<strong>No projects match your filters</strong>' +
+      'Try a different search term, level, type, framework or domain.' +
+      '<br><button onclick="clearAllFilters()">Clear all filters</button>' +
+    '</div>';
+  } else {
+    gridEl.innerHTML = slice.map((p, i) => {
+      const delay = Math.min(i * 12, 260);
+      const tCls  = p.type === "genai" ? "genai" : p.type === "agentic" ? "agentic" : "trad";
+
+      // per-level soft colors (no color-mix)
+      const lvSoft = rgba(p.color, 0.13);
+      const lvLine = rgba(p.color, 0.30);
+
+      const fwTags = (p.frameworks || []).map((fw, idx) => {
+        const info = FW_MAP[fw];
+        const isPrimary = idx === 0;
+        return '<span class="fw-tag' + (isPrimary ? " primary" : "") + '" ' +
+                 'title="' + esc(info ? info.desc : "") + '">' +
+          esc(fw) +
+          (info && isPrimary ? '<span class="cat">' + esc(info.cat) + '</span>' : '') +
+        '</span>';
+      }).join("");
+
+      return '<article class="card" style="--lv:' + p.color +
+               ';--lv-soft:' + lvSoft +
+               ';--lv-line:' + lvLine +
+               ';animation-delay:' + delay + 'ms">' +
+        '<div class="card-top">' +
+          '<span class="pid">#' + String(p.id).padStart(4, "0") + '</span>' +
+          '<div class="badges">' +
+            '<span class="tbadge ' + tCls + '">' + typeLabel(p.type) + '</span>' +
+            '<span class="lvl">' + p.levelLabel + '</span>' +
+          '</div>' +
+        '</div>' +
+        '<h3>' + hl(p.title, q) + '</h3>' +
+        '<span class="domain">' + hl(p.domain, q) + '</span>' +
+        '<p class="desc">' + hl(p.desc, q) + '</p>' +
+        '<div class="specs">' +
+          '<div class="spec"><span class="k">LLM</span><span class="v">' + hl(p.llm, q) + '</span></div>' +
+          '<div class="spec"><span class="k">UI</span><span class="v">' + hl(p.ui, q) + '</span></div>' +
+          '<div class="spec"><span class="k">Backend</span><span class="v">' + hl(p.backend, q) + '</span></div>' +
+          '<div class="spec"><span class="k">AI Frameworks</span><span class="v"><div class="fw-row">' + fwTags + '</div></span></div>' +
+          '<div class="spec"><span class="k">Vector / Infra</span><span class="v">' + hl(p.storage, q) + '</span></div>' +
+        '</div>' +
+      '</article>';
+    }).join("");
+  }
+
+  shownEl.textContent = slice.length;
+  totalEl.textContent = PROJECTS.length;
+  filteredEl.textContent = list.length;
+
+  renderPager(totalPages);
+}
+
+/* ==================================================================
+   18. RENDER — PAGINATION
+================================================================== */
+function renderPager(totalPages){
+  if(totalPages <= 1){ pagerEl.innerHTML = ""; return; }
+
+  const cur = state.page;
+  const parts = [];
+
+  parts.push('<button data-go="1" ' + (cur === 1 ? "disabled" : "") + '>«</button>');
+  parts.push('<button data-go="' + (cur - 1) + '" ' + (cur === 1 ? "disabled" : "") + '>‹ Prev</button>');
+
+  const pages = new Set([1, totalPages, cur, cur - 1, cur + 1, cur - 2, cur + 2]);
+  const sorted = [...pages].filter(p => p >= 1 && p <= totalPages).sort((a, b) => a - b);
+
+  let prev = 0;
+  sorted.forEach(p => {
+    if(prev && p - prev > 1) parts.push('<span class="gap">…</span>');
+    parts.push('<button data-go="' + p + '" class="' + (p === cur ? "active" : "") + '">' + p + '</button>');
+    prev = p;
+  });
+
+  parts.push('<button data-go="' + (cur + 1) + '" ' + (cur === totalPages ? "disabled" : "") + '>Next ›</button>');
+  parts.push('<button data-go="' + totalPages + '" ' + (cur === totalPages ? "disabled" : "") + '>»</button>');
+
+  pagerEl.innerHTML = parts.join("");
+}
+
+pagerEl.addEventListener("click", e => {
+  const b = e.target.closest("button[data-go]");
+  if(!b || b.disabled) return;
+  const p = parseInt(b.dataset.go, 10);
+  if(!p || p === state.page) return;
+  state.page = p;
+  render();
+  document.querySelector(".toolbar").scrollIntoView({ behavior: "smooth", block: "start" });
+});
+
+/* ==================================================================
+   19. FILTERING
+================================================================== */
+function getFiltered(){
+  const q = state.query.trim().toLowerCase();
+  return PROJECTS.filter(p => {
+    if(state.level  !== "all" && p.level  !== state.level)  return false;
+    if(state.type   !== "all" && p.type   !== state.type)   return false;
+    if(state.domain !== "all" && p.domain !== state.domain) return false;
+    if(state.framework !== "all" && !(p.frameworks || []).includes(state.framework)) return false;
+    if(!q) return true;
+
+    const fwMatch = (p.frameworks || []).some(fw => fw.toLowerCase().includes(q));
+    return (
+      p.title.toLowerCase().includes(q) ||
+      p.domain.toLowerCase().includes(q) ||
+      p.llm.toLowerCase().includes(q) ||
+      p.ui.toLowerCase().includes(q) ||
+      p.backend.toLowerCase().includes(q) ||
+      p.storage.toLowerCase().includes(q) ||
+      p.levelLabel.toLowerCase().includes(q) ||
+      p.type.toLowerCase().includes(q) ||
+      fwMatch ||
+      ("#" + p.id).includes(q)
+    );
+  });
+}
+
+window.clearAllFilters = function(){
+  state = { level:"all", type:"all", domain:"all", framework:"all", query:"", page:1, perPage: state.perPage };
+  searchEl.value = "";
+  clrBtn.classList.remove("show");
+  domainSel.value = "all";
+  typeSel.value = "all";
+  frameworkSel.value = "all";
+  typeSel.classList.remove("genai","agentic");
+  renderStats();
+  renderFrameworks();
+  renderActiveFilters();
+  render();
+};
+
+/* ==================================================================
+   20. EVENTS
+================================================================== */
+searchEl.addEventListener("input", () => {
+  state.query = searchEl.value;
+  state.page = 1;
+  clrBtn.classList.toggle("show", searchEl.value.length > 0);
+  renderActiveFilters();
+  render();
+});
+
+clrBtn.addEventListener("click", () => {
+  searchEl.value = "";
+  state.query = "";
+  state.page = 1;
+  clrBtn.classList.remove("show");
+  renderActiveFilters();
+  render();
+  searchEl.focus();
+});
+
+typeSel.addEventListener("change", () => {
+  state.type = typeSel.value;
+  state.page = 1;
+  typeSel.classList.toggle("genai", state.type === "genai");
+  typeSel.classList.toggle("agentic", state.type === "agentic");
+  renderActiveFilters();
+  render();
+});
+
+frameworkSel.addEventListener("change", () => {
+  state.framework = frameworkSel.value;
+  state.page = 1;
+  renderFrameworks();
+  renderActiveFilters();
+  render();
+});
+
+domainSel.addEventListener("change", () => {
+  state.domain = domainSel.value;
+  state.page = 1;
+  renderActiveFilters();
+  render();
+});
+
+perPageSel.addEventListener("change", () => {
+  state.perPage = parseInt(perPageSel.value, 10);
+  state.page = 1;
+  render();
+});
+
+document.addEventListener("keydown", e => {
+  const typing = document.activeElement === searchEl;
+
+  if(e.key === "/" && !typing){ e.preventDefault(); searchEl.focus(); }
+  if(e.key === "Escape" && typing){
+    searchEl.value = ""; state.query = ""; state.page = 1;
+    clrBtn.classList.remove("show");
+    renderActiveFilters();
+    render();
+    searchEl.blur();
+  }
+  if(e.key === "ArrowRight" && !typing && e.altKey){
+    const tp = Math.max(1, Math.ceil(getFiltered().length / state.perPage));
+    if(state.page < tp){ state.page++; render(); }
+  }
+  if(e.key === "ArrowLeft" && !typing && e.altKey){
+    if(state.page > 1){ state.page--; render(); }
+  }
+});
+
+/* ==================================================================
+   21. UNIVERSAL IMAGE CAPTURE (html2canvas-safe)
+================================================================== */
+function stamp(){
+  const d = new Date();
+  const p = n => String(n).padStart(2, "0");
+  return d.getFullYear() + "-" + p(d.getMonth() + 1) + "-" + p(d.getDate()) +
+         "_" + p(d.getHours()) + p(d.getMinutes()) + p(d.getSeconds());
+}
+
+function download(blob, filename){
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(url), 6000);
+}
+
+/* Pre-capture cleanup injected into the html2canvas clone */
+const CAPTURE_CLONE_CSS = `
+  *{
+    animation: none !important;
+    transition: none !important;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+    text-shadow: none !important;
+  }
+  body::before, body::after{ display: none !important; }
+  .card::after{ display: none !important; }
+  .sec-capture{ display: none !important; }
+  aside.side-tools, #toast, .toolbar, #bgGlow{ display: none !important; }
+  .toolbar{ display: none !important; }
+  .card:hover{ transform: none !important; box-shadow: none !important; }
+  .stat:hover{ transform: none !important; }
+  .fw-chip:hover{ transform: none !important; }
+  .pager{ display: none !important; }
+  .capture-credit{ display: block !important; }
+`;
+
+/* Build the credit strip that gets baked into every captured image */
+function makeCreditNode(sectionName){
+  const credit = document.createElement("div");
+  credit.className = "capture-credit";
+  credit.setAttribute("data-credit", "1");
+  credit.innerHTML =
+    'Created By <b>' + CREATOR_NAME + '</b>' +
+    '<span class="sub-line">' +
+      '1000 AI Projects · Foundation → GenAI → Agentic AI' +
+      (sectionName ? ' &nbsp;·&nbsp; ' + sectionName : '') +
+    '</span>';
+  return credit;
+}
+
+async function captureElement(el, filenameBase, opts = {}){
+  if(!window.html2canvas){
+    toast("html2canvas library failed to load. Check your internet connection.");
+    return;
+  }
+
+  /* 1. Inject the credit strip into the LIVE element first,
+        so it is included in the height measurement and in the render. */
+  const credit = makeCreditNode(opts.label || "");
+  el.appendChild(credit);
+
+  document.body.classList.add("capturing");
+  // give the browser a frame to apply capture-mode styles
+  await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+
+  try {
+    const savedX = window.scrollX;
+    const savedY = window.scrollY;
+    window.scrollTo(0, 0);
+
+    // compute safe scale so the largest side stays below canvas limits
+    const maxDim = 14000;
+    const elW = Math.max(el.scrollWidth, el.offsetWidth);
+    const elH = Math.max(el.scrollHeight, el.offsetHeight);
+    let scale = opts.scale || 2;
+    if (elH * scale > maxDim) scale = Math.max(1, maxDim / elH);
+    if (elW * scale > maxDim) scale = Math.min(scale, Math.max(1, maxDim / elW));
+
+    const canvas = await html2canvas(el, {
+      backgroundColor: "#080b12",
+      scale: scale,
+      useCORS: true,
+      allowTaint: false,
+      logging: false,
+      imageTimeout: 8000,
+      width: elW,
+      height: elH,
+      windowWidth: Math.max(document.documentElement.clientWidth, elW),
+      windowHeight: Math.max(document.documentElement.clientHeight, elH),
+      scrollX: 0,
+      scrollY: 0,
+      onclone: (clonedDoc) => {
+        // strip all animations, backdrop filters and pseudo-element noise
+        const styleEl = clonedDoc.createElement("style");
+        styleEl.textContent = CAPTURE_CLONE_CSS;
+        clonedDoc.head.appendChild(styleEl);
+
+        // make sure the cloned element itself is visible & not transformed
+        const clone = clonedDoc.querySelector("#" + el.id);
+        if (clone) {
+          clone.style.transform = "none";
+          clone.style.animation = "none";
+          clone.style.opacity = "1";
+        }
+
+        // force the body/wrap to a stable background inside the clone
+        if (clonedDoc.body) {
+          clonedDoc.body.style.background = "#080b12";
+          clonedDoc.body.style.overflow = "visible";
+        }
+      }
+    });
+
+    window.scrollTo(savedX, savedY);
+
+    const blob = await new Promise(res => canvas.toBlob(res, "image/png", 0.95));
+    if(!blob) throw new Error("Canvas could not be encoded");
+
+    download(blob, filenameBase + "_" + stamp() + ".png");
+    toast("Image saved · " + (blob.size / 1024 / 1024).toFixed(2) + " MB · credited to " + CREATOR_NAME);
+  } catch(err){
+    console.error("[html2canvas]", err);
+    toast("Image failed: " + (err.message || "unknown error"));
+  } finally {
+    document.body.classList.remove("capturing");
+    /* 2. Remove the credit strip from the live page again */
+    credit.remove();
+  }
+}
+
+/* ---- Full page capture (sidebar button) ---- */
+const btnImage = document.getElementById("btnImage");
+const btnTop   = document.getElementById("btnTop");
+
+btnTop.addEventListener("click", () => {
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+
+btnImage.addEventListener("click", async () => {
+  if(btnImage.classList.contains("loading")) return;
+
+  const visibleCards = gridEl.querySelectorAll(".card").length;
+  if(visibleCards > 60){
+    const ok = confirm(
+      "You are about to capture the whole page with " + visibleCards + " project cards.\n" +
+      "This may take 10–40 seconds.\n\n" +
+      "Tip: reduce 'per page' to 24–48 for a faster, smaller capture.\n\n" +
+      "Continue?"
+    );
+    if(!ok) return;
+  }
+
+  btnImage.classList.add("loading");
+  btnImage.disabled = true;
+  toast("Generating full-page image… please wait");
+
+  await captureElement(pageWrap, "ai-1000-projects_full", {
+    scale: 1.6,
+    label: "Full Catalogue"
+  });
+
+  btnImage.classList.remove("loading");
+  btnImage.disabled = false;
+});
+
+/* ---- Per-section capture buttons ---- */
+document.querySelectorAll(".sec-capture").forEach(btn => {
+  btn.addEventListener("click", async (e) => {
+    e.stopPropagation();
+    if(btn.disabled) return;
+    const targetId = btn.dataset.target;
+    const name     = btn.dataset.name || "section";
+    const el       = document.getElementById(targetId);
+    if(!el) return;
+
+    btn.disabled = true;
+    toast("Capturing " + name + "…");
+    await captureElement(el, "ai-1000-projects_" + name, {
+      scale: 2,
+      label: name.charAt(0).toUpperCase() + name.slice(1)
+    });
+    btn.disabled = false;
+  });
+});
+
+/* ==================================================================
+   22. EXPORT BUILDERS
+================================================================== */
+function exportRows(){ return getFiltered(); }
+
+function filterSummary(){
+  const bits = [];
+  bits.push("Level: " + (state.level === "all" ? "All" : state.level));
+  bits.push("Type: "  + (state.type  === "all" ? "All" : typeLabel(state.type)));
+  bits.push("Domain: "+ (state.domain=== "all" ? "All" : state.domain));
+  bits.push("Framework: " + (state.framework === "all" ? "All" : state.framework));
+  if(state.query.trim()) bits.push('Search: "' + state.query.trim() + '"');
+  return bits.join("  |  ");
+}
+
+function buildTXT(rows){
+  const L = [];
+  L.push("=".repeat(80));
+  L.push("1000 AI PROJECTS — FOUNDATION → GENAI → AGENTIC AI");
+  L.push("Frameworks Edition · LangGraph · LangChain · AutoGen · CrewAI · more");
+  L.push("Master in AI Engineering — the complete hands-on path for AI engineers");
+  L.push(CREATOR_LINE);
+  L.push("Export: " + new Date().toLocaleString());
+  L.push("Filters: " + filterSummary());
+  L.push("Projects in export: " + rows.length);
+  L.push("=".repeat(80));
+  L.push("");
+
+  rows.forEach(p => {
+    L.push("-".repeat(80));
+    L.push("#" + String(p.id).padStart(4, "0") + "  [" + typeLabel(p.type) + " · " + p.levelLabel + "]  " + p.title);
+    L.push("Domain      : " + p.domain);
+    L.push("LLM         : " + p.llm);
+    L.push("UI          : " + p.ui);
+    L.push("Backend     : " + p.backend);
+    L.push("Frameworks  : " + (p.frameworks || []).join(" · "));
+    L.push("Vector/Infra: " + p.storage);
+    L.push("");
+    L.push("Summary     : " + p.desc);
+    L.push("");
+  });
+
+  L.push("=".repeat(80));
+  L.push("END OF EXPORT — " + rows.length + " projects");
+  L.push("Master in AI Engineering · " + CREATOR_LINE);
+  return L.join("\r\n");
+}
+
+function buildHTML(rows, forPrint){
+  const lvlColor = {
+    foundation:"#16a34a", beginner:"#0d9488", intermediate:"#2563eb",
+    advanced:"#9333ea", expert:"#d97706", research:"#dc2626",
+    genai:"#db2777", agentic:"#0891b2"
+  };
+  const typeColor = { traditional:"#64748b", genai:"#db2777", agentic:"#0891b2" };
+
+  const cards = rows.map(p => {
+    const c = lvlColor[p.level] || "#334155";
+    const tc = typeColor[p.type] || "#334155";
+    const fwBadges = (p.frameworks || []).map(fw =>
+      '<span class="fwtag">' + esc(fw) + '</span>'
+    ).join(" ");
+
+    return '<div class="item">' +
+      '<div class="item-head">' +
+        '<span class="num">#' + String(p.id).padStart(4, "0") + '</span>' +
+        '<span class="badges">' +
+          '<span class="badge" style="color:' + tc + ';border-color:' + tc + '">' + typeLabel(p.type) + '</span>' +
+          '<span class="badge" style="color:' + c + ';border-color:' + c + '">' + esc(p.levelLabel) + '</span>' +
+        '</span>' +
+      '</div>' +
+      '<h3>' + esc(p.title) + '</h3>' +
+      '<div class="dom">' + esc(p.domain) + '</div>' +
+      '<p>' + esc(p.desc) + '</p>' +
+      '<table>' +
+        '<tr><td class="k">LLM</td><td>' + esc(p.llm) + '</td></tr>' +
+        '<tr><td class="k">UI</td><td>' + esc(p.ui) + '</td></tr>' +
+        '<tr><td class="k">Backend</td><td>' + esc(p.backend) + '</td></tr>' +
+        '<tr><td class="k">AI Frameworks</td><td>' + fwBadges + '</td></tr>' +
+        '<tr><td class="k">Vector / Infra</td><td>' + esc(p.storage) + '</td></tr>' +
+      '</table>' +
+    '</div>';
+  }).join("");
+
+  /* ---- print-only CSS: repeating per-page credit footer ---- */
+  const printCSS = forPrint ? `
+    @page { size: A4; margin: 14mm 12mm 20mm 12mm; }
+    body { font-size: 9.5pt; padding-bottom: 16mm; }
+    .item { page-break-inside: avoid; }
+    /* position:fixed repeats on EVERY printed page in Chrome / Edge / Firefox */
+    .page-credit{
+      position: fixed;
+      left: 0; right: 0; bottom: 0;
+      text-align: center;
+      font-family: Segoe UI, Arial, Helvetica, sans-serif;
+      font-size: 7.5pt;
+      font-weight: 700;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: #94a3b8;
+      padding: 5px 0 2px;
+      border-top: 1px solid #e2e8f0;
+      background: #ffffff;
+    }
+    .page-credit b{ color:#4338ca; font-weight:800; }
+    .page-credit .pg-sub{
+      display:block;
+      font-size:6.5pt;
+      font-weight:600;
+      letter-spacing:.16em;
+      color:#cbd5e1;
+      margin-top:1px;
+    }
+  ` : "";
+
+  /* ---- per-page credit bar (print / PDF only) ---- */
+  const creditBar = forPrint
+    ? '<div class="page-credit">' +
+        CREATOR_LINE +
+        '<span class="pg-sub">1000 AI Projects · Foundation → GenAI → Agentic AI · Frameworks Edition</span>' +
+      '</div>'
+    : '';
+
+  return '<!DOCTYPE html><html><head><meta charset="utf-8">' +
+  '<title>1000 AI Projects — Foundation to GenAI &amp; Agentic AI</title>' +
+  '<style>' +
+    'body{font-family:Segoe UI,Arial,Helvetica,sans-serif;color:#0f172a;margin:0;padding:26px;background:#fff;}' +
+    'h1{font-size:22pt;margin:0 0 6px;letter-spacing:-.02em;color:#0b1220;}' +
+    'h2.sub{font-size:10pt;font-weight:400;color:#64748b;margin:0 0 16px;}' +
+    '.masters{font-size:9pt;color:#4338ca;background:#eef2ff;border:1px solid #c7d2fe;' +
+      'padding:9px 12px;border-radius:8px;margin-bottom:12px;line-height:1.6;}' +
+    '.masters b{color:#1e1b4b;}' +
+    '.meta{font-size:8.5pt;color:#475569;border:1px solid #e2e8f0;background:#f8fafc;' +
+      'padding:9px 12px;border-radius:8px;margin-bottom:18px;line-height:1.7;}' +
+    '.meta b{color:#0f172a;}' +
+    '.item{border:1px solid #e2e8f0;border-radius:9px;padding:11px 13px;margin-bottom:10px;' +
+      'background:#fff;page-break-inside:avoid;}' +
+    '.item-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;flex-wrap:wrap;gap:6px;}' +
+    '.num{font-family:Consolas,monospace;font-size:8pt;color:#94a3b8;letter-spacing:.04em;}' +
+    '.badges{display:flex;gap:5px;}' +
+    '.badge{font-size:7pt;font-weight:700;letter-spacing:.09em;text-transform:uppercase;' +
+      'border:1px solid #cbd5e1;border-radius:4px;padding:1px 6px;}' +
+    '.item h3{font-size:11pt;margin:0 0 4px;color:#0b1220;line-height:1.3;}' +
+    '.dom{display:inline-block;font-size:7.5pt;color:#475569;background:#f1f5f9;' +
+      'border-radius:4px;padding:1px 7px;margin-bottom:6px;}' +
+    '.item p{font-size:8.8pt;color:#334155;margin:0 0 8px;line-height:1.5;}' +
+    'table{width:100%;border-collapse:collapse;font-size:8.4pt;}' +
+    'td{padding:2.5px 0;vertical-align:top;border-top:1px solid #f1f5f9;}' +
+    'td.k{width:110px;color:#64748b;font-weight:600;font-size:7.4pt;' +
+      'text-transform:uppercase;letter-spacing:.05em;padding-right:8px;}' +
+    'td:last-child{color:#1e293b;}' +
+    '.fwtag{display:inline-block;font-size:7.3pt;font-weight:600;' +
+      'background:#eef2ff;color:#4338ca;border:1px solid #c7d2fe;' +
+      'border-radius:4px;padding:1px 6px;margin:1px 2px 1px 0;}' +
+    '.foot{margin-top:22px;padding-top:12px;border-top:1px solid #e2e8f0;' +
+      'font-size:8pt;color:#94a3b8;text-align:center;}' +
+    printCSS +
+  '</style></head><body>' +
+    '<h1>1000 AI Projects — Foundation to GenAI &amp; Agentic AI</h1>' +
+    '<h2 class="sub">LLM · UI (React / Streamlit) · Backend (Python FastAPI) · AI Frameworks (LangGraph / LangChain / AutoGen / CrewAI / LlamaIndex / DSPy) · Vector DB &amp; Infra</h2>' +
+    '<div class="masters">' +
+      '<b>Master in AI Engineering</b> — Build production-grade GenAI, Agentic AI, RAG &amp; MLOps systems.<br>' +
+      'From LLM foundations to multi-agent orchestration — the complete hands-on path for AI engineers.' +
+    '</div>' +
+    '<div class="meta">' +
+      '<b>' + CREATOR_LINE + '</b><br>' +
+      '<b>Exported:</b> ' + new Date().toLocaleString() + '<br>' +
+      '<b>Projects in export:</b> ' + rows.length + ' of ' + PROJECTS.length + '<br>' +
+      '<b>Filters:</b> ' + esc(filterSummary()) +
+    '</div>' +
+    cards +
+    '<div class="foot">1000 AI Projects · Frameworks Edition · ' + rows.length + ' entries<br>' +
+      'Master in AI Engineering · ' + CREATOR_LINE + '</div>' +
+    creditBar +
+  '</body></html>';
+}
+
+/* ==================================================================
+   23. EXPORT ACTIONS
+================================================================== */
+document.getElementById("btnTXT").addEventListener("click", () => {
+  const rows = exportRows();
+  if(!rows.length){ toast("Nothing to export — no projects match."); return; }
+  const blob = new Blob(["\ufeff" + buildTXT(rows)], { type:"text/plain;charset=utf-8" });
+  download(blob, "ai-1000-projects_" + stamp() + ".txt");
+  toast("TXT exported · " + rows.length + " projects");
+});
+
+document.getElementById("btnDOC").addEventListener("click", () => {
+  const rows = exportRows();
+  if(!rows.length){ toast("Nothing to export — no projects match."); return; }
+  const html =
+    '<html xmlns:o="urn:schemas-microsoft-com:office:office" ' +
+    'xmlns:w="urn:schemas-microsoft-com:office:word" ' +
+    'xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8">' +
+    '<title>1000 AI Projects</title></head><body>' +
+    buildHTML(rows, false).replace(/^[\s\S]*?<body>/, "").replace(/<\/body><\/html>$/, "") +
+    '</body></html>';
+  const blob = new Blob(["\ufeff", html], { type:"application/msword;charset=utf-8" });
+  download(blob, "ai-1000-projects_" + stamp() + ".doc");
+  toast("DOC exported · " + rows.length + " projects");
+});
+
+document.getElementById("btnPDF").addEventListener("click", () => {
+  const rows = exportRows();
+  if(!rows.length){ toast("Nothing to export — no projects match."); return; }
+  toast("Opening print dialog — choose “Save as PDF” (credit on every page)");
+  const w = window.open("", "_blank");
+  if(!w){ toast("Popup blocked — please allow popups for PDF export."); return; }
+  w.document.open();
+  w.document.write(buildHTML(rows, true));
+  w.document.close();
+  const go = () => { try { w.focus(); w.print(); } catch(e){} };
+  if(w.document.readyState === "complete") setTimeout(go, 400);
+  else w.onload = () => setTimeout(go, 400);
+});
+
+/* ==================================================================
+   24. INIT
+================================================================== */
+renderFrameworks();
+renderStats();
+renderActiveFilters();
+render();
+</script>
+
+</body>
+</html>
