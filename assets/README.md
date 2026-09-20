@@ -1,7 +1,5 @@
 # Section-wise project assets
 
-
-
 | Section | Projects | Image |
 |---|---:|---|
 | Foundation | 120 | `foundation.svg` |
