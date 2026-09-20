@@ -4,7 +4,7 @@
 
 ## Overview
 
-A complete, filterable catalogue of AI use cases — classical ML foundations, cutting-edge Generative AI, and autonomous Agentic AI. Every project ships with a suggested LLM, UI layer (React / Streamlit), Python FastAPI backend, plus a full AI framework stack including LangGraph, LangChain, AutoGen, CrewAI, LlamaIndex, DSPy and more.
+A complete catalogue of AI use cases — classical ML foundations, cutting-edge Generative AI, and autonomous Agentic AI. Every project ships with a suggested LLM, UI layer (React / Streamlit), Python FastAPI backend, plus a full AI framework stack including LangGraph, LangChain, AutoGen, CrewAI, LlamaIndex, DSPy and more.
 
 ## Master in AI Engineering
 
